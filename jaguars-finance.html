@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cricket Team Finance</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f0d; --surface: #111a15; --surface2: #162019; --border: #1e3028;
+    --green: #22c55e; --green-dim: #16a34a; --green-glow: rgba(34,197,94,0.15);
+    --red: #ef4444; --amber: #f59e0b; --text: #e8f5e9;
+    --text-dim: #6b8f74; --text-muted: #3d5e46; --accent: #4ade80;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
+  body::before { content:''; position:fixed; inset:0; background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(34,197,94,.06) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(34,197,94,.04) 0%,transparent 50%); pointer-events:none; z-index:0; }
+
+  nav { position:sticky; top:0; z-index:100; background:rgba(10,15,13,.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:0 1.5rem; display:flex; align-items:center; height:60px; gap:0.5rem; }
+  .nav-brand { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:2px; color:var(--accent); margin-right:1rem; display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
+  .nav-brand span { color:var(--text-dim); font-size:.85rem; letter-spacing:1px; font-family:'DM Sans',sans-serif; font-weight:300; }
+  .nav-tabs { display:flex; gap:.2rem; flex:1; }
+  .nav-tab { padding:.4rem 1rem; border:none; background:transparent; color:var(--text-dim); font-family:'DM Sans',sans-serif; font-size:.83rem; font-weight:500; cursor:pointer; border-radius:6px; transition:all .2s; white-space:nowrap; }
+  .nav-tab:hover { background:var(--surface2); color:var(--text); }
+  .nav-tab.active { background:var(--green-glow); color:var(--accent); border:1px solid rgba(74,222,128,.2); }
+  .year-switcher { display:flex; align-items:center; gap:.4rem; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:.3rem .7rem; margin-left:auto; white-space:nowrap; }
+  .year-switcher label { font-size:.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); }
+  .year-switcher select { background:transparent; border:none; color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:.9rem; font-weight:600; cursor:pointer; outline:none; padding:0; }
+  .year-switcher select option { background:#111a15; }
+  .btn-new-year { background:none; border:1px solid var(--border); color:var(--text-dim); border-radius:5px; padding:.15rem .5rem; font-size:.75rem; cursor:pointer; transition:all .2s; font-family:'DM Sans',sans-serif; }
+  .btn-new-year:hover { background:var(--green-glow); color:var(--accent); border-color:rgba(74,222,128,.3); }
+
+  .page { display:none; padding:2rem; max-width:1200px; margin:0 auto; position:relative; z-index:1; }
+  .page.active { display:block; animation:fadeIn .3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .page-title { font-family:'Bebas Neue',sans-serif; font-size:2.8rem; letter-spacing:3px; color:var(--text); margin-bottom:.25rem; }
+  .page-subtitle { color:var(--text-dim); font-size:.9rem; margin-bottom:2rem; }
+  .year-badge { display:inline-flex; align-items:center; background:var(--green-glow); border:1px solid rgba(74,222,128,.2); border-radius:6px; padding:.2rem .7rem; font-family:'JetBrains Mono',monospace; font-size:.85rem; color:var(--accent); font-weight:600; }
+
+  .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-bottom:2rem; }
+  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.4rem 1.6rem; position:relative; overflow:hidden; transition:border-color .2s; }
+  .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; border-radius:12px 12px 0 0; }
+  .stat-card.green::before{background:var(--green)} .stat-card.red::before{background:var(--red)} .stat-card.amber::before{background:var(--amber)} .stat-card.blue::before{background:#60a5fa}
+  .stat-card:hover { border-color:var(--text-muted); }
+  .stat-label { font-size:.72rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-dim); margin-bottom:.5rem; }
+  .stat-value { font-family:'JetBrains Mono',monospace; font-size:2rem; font-weight:600; line-height:1; margin-bottom:.3rem; }
+  .stat-card.green .stat-value{color:var(--green)} .stat-card.red .stat-value{color:var(--red)} .stat-card.amber .stat-value{color:var(--amber)} .stat-card.blue .stat-value{color:#60a5fa}
+  .stat-sub { font-size:.78rem; color:var(--text-muted); }
+
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:768px){.two-col{grid-template-columns:1fr}}
+
+  .section-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .section-header { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.4rem; border-bottom:1px solid var(--border); }
+  .section-title { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:2px; color:var(--accent); }
+  .badge { font-family:'JetBrains Mono',monospace; font-size:.72rem; padding:.2rem .6rem; border-radius:20px; font-weight:600; }
+  .badge-green{background:rgba(34,197,94,.15);color:var(--green)} .badge-red{background:rgba(239,68,68,.15);color:var(--red)}
+
+  .data-table { width:100%; border-collapse:collapse; }
+  .data-table th { font-size:.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted); padding:.7rem 1.4rem; text-align:left; border-bottom:1px solid var(--border); background:var(--surface2); }
+  .data-table td { padding:.8rem 1.4rem; font-size:.88rem; border-bottom:1px solid rgba(30,48,40,.5); vertical-align:middle; }
+  .data-table tr:last-child td{border-bottom:none} .data-table tr:hover td{background:rgba(34,197,94,.03)}
+  .amount-green{font-family:'JetBrains Mono',monospace;color:var(--green);font-weight:600}
+  .amount-red{font-family:'JetBrains Mono',monospace;color:var(--red);font-weight:600}
+
+  .tag { display:inline-block; font-size:.68rem; padding:.15rem .5rem; border-radius:4px; text-transform:uppercase; letter-spacing:.5px; font-weight:600; }
+  .tag-sponsor{background:rgba(96,165,250,.15);color:#60a5fa} .tag-player{background:rgba(34,197,94,.15);color:var(--green)}
+  .tag-food{background:rgba(245,158,11,.15);color:var(--amber)} .tag-umpire{background:rgba(167,139,250,.15);color:#a78bfa}
+  .tag-registration{background:rgba(251,113,133,.15);color:#fb7185} .tag-water{background:rgba(56,189,248,.15);color:#38bdf8}
+  .tag-electrolyte{background:rgba(52,211,153,.15);color:#34d399} .tag-party{background:rgba(251,191,36,.15);color:#fbbf24}
+  .tag-other{background:rgba(107,114,128,.15);color:#9ca3af}
+
+  .form-grid { display:grid; gap:1rem; padding:1.5rem; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  @media(max-width:600px){.form-row{grid-template-columns:1fr}}
+  .form-group { display:flex; flex-direction:column; gap:.4rem; }
+  label { font-size:.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); font-weight:500; }
+  input,select,textarea { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:.65rem .9rem; color:var(--text); font-family:'DM Sans',sans-serif; font-size:.9rem; transition:border-color .2s,box-shadow .2s; outline:none; width:100%; }
+  input:focus,select:focus,textarea:focus { border-color:var(--green-dim); box-shadow:0 0 0 3px var(--green-glow); }
+  select option{background:#111a15} textarea{resize:vertical;min-height:80px}
+
+  .btn { display:inline-flex; align-items:center; gap:.4rem; padding:.65rem 1.4rem; border-radius:8px; border:none; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:600; cursor:pointer; transition:all .2s; }
+  .btn-primary{background:var(--green);color:#0a0f0d} .btn-primary:hover{background:var(--accent);transform:translateY(-1px);box-shadow:0 4px 20px rgba(34,197,94,.3)}
+  .btn-danger{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.2)} .btn-danger:hover{background:rgba(239,68,68,.25)}
+  .btn-ghost{background:transparent;color:var(--text-dim);border:1px solid var(--border)} .btn-ghost:hover{background:var(--surface2);color:var(--text)}
+  .btn-sm{padding:.3rem .7rem;font-size:.78rem}
+
+  .balance-bar-wrap{padding:1.4rem}
+  .balance-labels{display:flex;justify-content:space-between;font-size:.78rem;color:var(--text-dim);margin-bottom:.5rem}
+  .balance-bar-bg{background:var(--surface2);border-radius:99px;height:8px;overflow:hidden;border:1px solid var(--border)}
+  .balance-bar-fill{height:100%;border-radius:99px;transition:width .6s ease;background:linear-gradient(90deg,var(--green-dim),var(--accent))}
+
+  .category-list{padding:.8rem 1.4rem;display:flex;flex-direction:column;gap:.6rem}
+  .cat-row{display:flex;align-items:center;gap:.8rem}
+  .cat-label{font-size:.82rem;color:var(--text-dim);min-width:110px}
+  .cat-bar-bg{flex:1;background:var(--surface2);border-radius:99px;height:6px;overflow:hidden}
+  .cat-bar-fill{height:100%;border-radius:99px;transition:width .5s ease}
+  .cat-amount{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text-dim);min-width:60px;text-align:right}
+
+  .empty-state{text-align:center;padding:3rem 1rem;color:var(--text-muted);font-size:.9rem}
+  .empty-state .icon{font-size:2.5rem;margin-bottom:.5rem;opacity:.5}
+
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:999;align-items:center;justify-content:center;padding:1rem}
+  .modal-overlay.active{display:flex}
+  .modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;animation:modalIn .25s ease}
+  @keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  .modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border)}
+  .modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--accent)}
+  .modal-close{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:1.3rem;transition:color .2s}
+  .modal-close:hover{color:var(--text)}
+  .modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.6rem}
+
+  .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.8rem 1.2rem;font-size:.88rem;z-index:9999;display:flex;align-items:center;gap:.6rem;transform:translateY(100px);opacity:0;transition:all .3s ease;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+  .toast.show{transform:translateY(0);opacity:1}
+  .toast.success{border-left:3px solid var(--green)} .toast.error{border-left:3px solid var(--red)}
+
+  .player-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+  .player-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;display:flex;align-items:center;gap:1rem;transition:border-color .2s}
+  .player-card:hover{border-color:var(--text-muted)}
+  .player-avatar{width:42px;height:42px;border-radius:50%;background:var(--green-glow);border:1px solid rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--accent);flex-shrink:0}
+  .player-info{flex:1;min-width:0}
+  .player-name{font-weight:600;font-size:.92rem;margin-bottom:.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .player-meta{font-size:.78rem;color:var(--text-dim)}
+  .player-amount{text-align:right}
+  .player-due{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600}
+  .player-due.paid{color:var(--green)} .player-due.partial{color:var(--amber)} .player-due.unpaid{color:var(--red)}
+  .player-due-label{font-size:.7rem;color:var(--text-muted)}
+
+  ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+  .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+  .top-bar-left{display:flex;flex-direction:column;gap:.1rem}
+  .del-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;padding:.2rem .4rem;border-radius:4px;transition:all .2s}
+  .del-btn:hover{color:var(--red);background:rgba(239,68,68,.1)}
+  .format-pill{font-size:.7rem;padding:.1rem .45rem;border-radius:4px;font-weight:600;letter-spacing:.5px}
+  .format-t20{background:rgba(96,165,250,.15);color:#60a5fa} .format-t40{background:rgba(167,139,250,.15);color:#a78bfa} .format-both{background:rgba(34,197,94,.15);color:var(--green)}
+
+  /* SETTINGS */
+  .settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+  .settings-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .settings-section-header{padding:1rem 1.4rem;border-bottom:1px solid var(--border);background:var(--surface2)}
+  .settings-section-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--accent)}
+  .settings-section-sub{font-size:.78rem;color:var(--text-muted);margin-top:.2rem}
+  .settings-body{padding:1.4rem;display:flex;flex-direction:column;gap:1rem}
+  .setting-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 1rem;background:var(--surface2);border-radius:8px;border:1px solid var(--border)}
+  .setting-row-label{font-size:.88rem;color:var(--text);font-weight:500}
+  .setting-row-sub{font-size:.75rem;color:var(--text-muted);margin-top:.15rem}
+  .setting-input-wrap{display:flex;align-items:center;gap:.4rem}
+  .setting-input-wrap span{color:var(--text-dim);font-size:.9rem}
+  .setting-input{width:90px!important;text-align:right;font-family:'JetBrains Mono',monospace!important;font-size:.95rem!important;padding:.4rem .6rem!important}
+
+  .year-list{display:flex;flex-direction:column;gap:.5rem}
+  .year-list-row{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;background:var(--surface2);border-radius:8px;border:1px solid var(--border)}
+  .year-list-row.active-year{border-color:rgba(74,222,128,.3);background:var(--green-glow)}
+  .year-list-name{font-family:'JetBrains Mono',monospace;font-size:.95rem;color:var(--text);font-weight:600}
+  .year-list-stats{font-size:.78rem;color:var(--text-dim);margin-top:.1rem}
+  .year-list-actions{display:flex;gap:.4rem;align-items:center;flex-shrink:0}
+
+  .fee-preview-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:.95rem}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">🏏 CRICKET FUNDS <span>/ FINANCE</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('dashboard')">Dashboard</button>
+    <button class="nav-tab" onclick="showPage('funding')">Funding</button>
+    <button class="nav-tab" onclick="showPage('expenses')">Expenses</button>
+    <button class="nav-tab" onclick="showPage('players')">Players</button>
+    <button class="nav-tab" onclick="showPage('settings')">⚙ Settings</button>
+  </div>
+  <div class="year-switcher">
+    <label>Season</label>
+    <select id="year-select" onchange="switchYear(this.value)"></select>
+    <button class="btn-new-year" onclick="promptNewYear()">+ New</button>
+  </div>
+</nav>
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="page-title">DASHBOARD</div>
+      <div class="page-subtitle">Season overview &nbsp;<span class="year-badge" id="dash-year-badge"></span></div>
+    </div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card green"><div class="stat-label">Total Collected</div><div class="stat-value" id="stat-collected">$0</div><div class="stat-sub">Players + Sponsors</div></div>
+    <div class="stat-card red"><div class="stat-label">Total Spent</div><div class="stat-value" id="stat-spent">$0</div><div class="stat-sub">All expenses</div></div>
+    <div class="stat-card amber"><div class="stat-label">Balance</div><div class="stat-value" id="stat-balance">$0</div><div class="stat-sub">Remaining funds</div></div>
+    <div class="stat-card blue"><div class="stat-label">Pending Payments</div><div class="stat-value" id="stat-pending">$0</div><div class="stat-sub">From players</div></div>
+  </div>
+  <div class="section-card" style="margin-bottom:1.5rem">
+    <div class="section-header"><div class="section-title">BUDGET UTILIZATION</div><span class="badge badge-green" id="util-pct">0%</span></div>
+    <div class="balance-bar-wrap">
+      <div class="balance-labels"><span id="bal-left">$0 spent</span><span id="bal-right">$0 total</span></div>
+      <div class="balance-bar-bg"><div class="balance-bar-fill" id="balance-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="section-card"><div class="section-header"><div class="section-title">EXPENSE BREAKDOWN</div></div><div class="category-list" id="cat-breakdown"><div class="empty-state"><div class="icon">📊</div>No expenses yet</div></div></div>
+    <div class="section-card"><div class="section-header"><div class="section-title">FUNDING SOURCES</div></div><div class="category-list" id="funding-breakdown"><div class="empty-state"><div class="icon">💰</div>No funding yet</div></div></div>
+  </div>
+  <div class="section-card" style="margin-top:1.5rem">
+    <div class="section-header"><div class="section-title">RECENT ACTIVITY</div></div>
+    <div id="recent-activity"><div class="empty-state"><div class="icon">📋</div>No activity yet</div></div>
+  </div>
+</div>
+
+<!-- FUNDING -->
+<div class="page" id="page-funding">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="page-title">FUNDING</div>
+      <div class="page-subtitle">Sponsors &amp; player payments &nbsp;<span class="year-badge" id="funding-year-badge"></span></div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-funding')">+ Add Funding</button>
+  </div>
+  <div class="section-card">
+    <div class="section-header"><div class="section-title">FUNDING RECORDS</div><span class="badge badge-green" id="funding-total-badge">$0</span></div>
+    <div id="funding-table-wrap"><div class="empty-state"><div class="icon">💸</div>No funding added yet</div></div>
+  </div>
+</div>
+
+<!-- EXPENSES -->
+<div class="page" id="page-expenses">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="page-title">EXPENSES</div>
+      <div class="page-subtitle">Track every spend &nbsp;<span class="year-badge" id="expenses-year-badge"></span></div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-expense')">+ Add Expense</button>
+  </div>
+  <div class="section-card">
+    <div class="section-header"><div class="section-title">EXPENSE RECORDS</div><span class="badge badge-red" id="expense-total-badge">$0</span></div>
+    <div id="expense-table-wrap"><div class="empty-state"><div class="icon">🧾</div>No expenses added yet</div></div>
+  </div>
+</div>
+
+<!-- PLAYERS -->
+<div class="page" id="page-players">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="page-title">PLAYERS</div>
+      <div class="page-subtitle">Roster &amp; payment status &nbsp;<span class="year-badge" id="players-year-badge"></span></div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-player')">+ Add Player</button>
+  </div>
+  <div class="stats-grid" id="fee-tier-cards" style="margin-bottom:1.5rem"></div>
+  <div id="player-cards-wrap"><div class="empty-state" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:3rem"><div class="icon">🏏</div>No players added yet</div></div>
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="page-settings">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="page-title">SETTINGS</div>
+      <div class="page-subtitle">Fee tiers &amp; season management</div>
+    </div>
+  </div>
+  <div class="settings-grid">
+    <!-- FEE TIERS -->
+    <div class="settings-section">
+      <div class="settings-section-header">
+        <div class="settings-section-title">PLAYER FEE TIERS</div>
+        <div class="settings-section-sub">Fees for season &nbsp;<span class="year-badge" id="settings-year-badge" style="font-size:.72rem;padding:.1rem .5rem"></span></div>
+      </div>
+      <div class="settings-body">
+        <div class="setting-row">
+          <div><div class="setting-row-label">T20 + T40 (Both)</div><div class="setting-row-sub">Plays in both formats</div></div>
+          <div class="setting-input-wrap"><span>$</span><input class="setting-input" type="number" id="fee-both" min="0" step="1"></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-row-label">T20 Only</div><div class="setting-row-sub">Single format — T20</div></div>
+          <div class="setting-input-wrap"><span>$</span><input class="setting-input" type="number" id="fee-t20" min="0" step="1"></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-row-label">T40 Only</div><div class="setting-row-sub">Single format — T40</div></div>
+          <div class="setting-input-wrap"><span>$</span><input class="setting-input" type="number" id="fee-t40" min="0" step="1"></div>
+        </div>
+        <p style="font-size:.78rem;color:var(--text-muted);line-height:1.5">These fees apply only to the currently selected season. New seasons copy fees from the active season.</p>
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="saveFees()">Save Fee Tiers for <span id="save-fee-year"></span></button>
+      </div>
+    </div>
+
+    <!-- SEASON MANAGEMENT -->
+    <div class="settings-section">
+      <div class="settings-section-header">
+        <div class="settings-section-title">SEASON MANAGEMENT</div>
+        <div class="settings-section-sub">Each season stores its own data independently</div>
+      </div>
+      <div class="settings-body">
+        <div class="year-list" id="year-list"></div>
+        <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="promptNewYear()">+ Create New Season</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: FUNDING -->
+<div class="modal-overlay" id="modal-funding">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">ADD FUNDING</div><button class="modal-close" onclick="closeModal('modal-funding')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="form-group"><label>Source Type</label><select id="f-type" onchange="togglePlayerField()"><option value="sponsor">Sponsor</option><option value="player">Player Payment</option><option value="other">Other</option></select></div>
+        <div class="form-group"><label>Amount ($)</label><input type="number" id="f-amount" placeholder="0.00" min="0" step="0.01"></div>
+      </div>
+      <div class="form-group"><label>Name / Description</label><input type="text" id="f-name" placeholder="Sponsor or player name"></div>
+      <div class="form-group" id="f-player-field" style="display:none"><label>Link to Player (optional)</label><select id="f-player-link"><option value="">-- Select player --</option></select></div>
+      <div class="form-group"><label>Date</label><input type="date" id="f-date"></div>
+      <div class="form-group"><label>Notes</label><textarea id="f-notes" placeholder="Any notes..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-funding')">Cancel</button><button class="btn btn-primary" onclick="addFunding()">Save Funding</button></div>
+  </div>
+</div>
+
+<!-- MODAL: EXPENSE -->
+<div class="modal-overlay" id="modal-expense">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">ADD EXPENSE</div><button class="modal-close" onclick="closeModal('modal-expense')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="form-group"><label>Category</label><select id="e-category"><option value="food">Food (Game)</option><option value="water">Water</option><option value="electrolyte">Electrolytes</option><option value="umpire">Umpiring</option><option value="registration">Team Registration</option><option value="party">Party / Celebration</option><option value="other">Other</option></select></div>
+        <div class="form-group"><label>Amount ($)</label><input type="number" id="e-amount" placeholder="0.00" min="0" step="0.01"></div>
+      </div>
+      <div class="form-group"><label>Description</label><input type="text" id="e-desc" placeholder="What was this expense for?"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Format (if game-related)</label><select id="e-format"><option value="general">General</option><option value="T20">T20</option><option value="T40">T40</option></select></div>
+        <div class="form-group"><label>Date</label><input type="date" id="e-date"></div>
+      </div>
+      <div class="form-group"><label>Notes</label><textarea id="e-notes" placeholder="Any notes..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-expense')">Cancel</button><button class="btn btn-primary" onclick="addExpense()">Save Expense</button></div>
+  </div>
+</div>
+
+<!-- MODAL: PLAYER -->
+<div class="modal-overlay" id="modal-player">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">ADD PLAYER</div><button class="modal-close" onclick="closeModal('modal-player')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-group"><label>Player Name</label><input type="text" id="p-name" placeholder="Full name"></div>
+      <div class="form-group"><label>Format</label><select id="p-format" onchange="updateFeePreview()"><option value="both">T20 + T40</option><option value="t20">T20 Only</option><option value="t40">T40 Only</option></select></div>
+      <div class="form-group"><label>Fee Due (this season)</label><div class="fee-preview-box" id="fee-preview">$250</div></div>
+      <div class="form-group"><label>Amount Already Paid ($)</label><input type="number" id="p-paid" placeholder="0.00" min="0" step="0.01" value="0"></div>
+      <div class="form-group"><label>Contact / Notes</label><input type="text" id="p-notes" placeholder="Phone or notes"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-player')">Cancel</button><button class="btn btn-primary" onclick="addPlayer()">Add Player</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// STATE — per-year isolation
+// Structure: { activeYear, years: { "2025": { fees, funding, expenses, players } } }
+// ============================================================
+const CURRENT_YEAR = String(new Date().getFullYear());
+const DEFAULT_FEES = { both:250, t20:100, t40:150 };
+
+function loadAll() {
+  try { const r = localStorage.getItem('cf_v2'); if(r) return JSON.parse(r); } catch(e){}
+  return { activeYear: CURRENT_YEAR, years: { [CURRENT_YEAR]: freshYear() } };
+}
+
+function freshYear(baseFees) {
+  return { fees: { ...(baseFees || DEFAULT_FEES) }, funding:[], expenses:[], players:[] };
+}
+
+let G = loadAll();
+function save() { localStorage.setItem('cf_v2', JSON.stringify(G)); }
+function yr() { if (!G.years[G.activeYear]) G.years[G.activeYear] = freshYear(); return G.years[G.activeYear]; }
+function fees() { return yr().fees || DEFAULT_FEES; }
+
+// ============================================================
+// YEAR MGMT
+// ============================================================
+function buildYearSelect() {
+  const sel = document.getElementById('year-select');
+  const years = Object.keys(G.years).sort((a,b)=>b-a);
+  sel.innerHTML = years.map(y=>`<option value="${y}"${y===G.activeYear?' selected':''}>${y}</option>`).join('');
+}
+
+function switchYear(y) {
+  G.activeYear = y; save();
+  buildYearSelect(); updateBadges(); rerenderActive();
+  toast(`Switched to ${y} season`);
+}
+
+function promptNewYear() {
+  const raw = prompt('Enter season year (e.g. 2026):');
+  if (!raw) return;
+  const y = raw.trim();
+  if (!/^\d{4}$/.test(y)) { toast('Enter a valid 4-digit year','error'); return; }
+  if (G.years[y]) { switchYear(y); return; }
+  G.years[y] = freshYear(fees()); // copy current fees
+  G.activeYear = y; save();
+  buildYearSelect(); updateBadges(); rerenderActive();
+  toast(`${y} season created!`);
+}
+
+function deleteYear(y) {
+  if (Object.keys(G.years).length <= 1) { toast("Can't delete the only season",'error'); return; }
+  if (!confirm(`Delete the entire ${y} season and all its data? This cannot be undone.`)) return;
+  delete G.years[y];
+  if (G.activeYear===y) G.activeYear = Object.keys(G.years).sort((a,b)=>b-a)[0];
+  save(); buildYearSelect(); updateBadges(); rerenderActive(); toast(`${y} deleted`);
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function $fmt(n){ return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function $date(d){ if(!d) return '—'; return new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2); }
+function today(){ return new Date().toISOString().slice(0,10); }
+
+function tagHtml(cat){
+  const m={sponsor:['tag-sponsor','Sponsor'],player:['tag-player','Player'],other:['tag-other','Other'],
+    food:['tag-food','Food'],water:['tag-water','Water'],electrolyte:['tag-electrolyte','Electrolyte'],
+    umpire:['tag-umpire','Umpire'],registration:['tag-registration','Registration'],party:['tag-party','Party']};
+  const [c,l]=m[cat]||['tag-other',cat];
+  return `<span class="tag ${c}">${l}</span>`;
+}
+function fmtPill(f){
+  if(!f||f==='general') return '<span style="color:var(--text-muted);font-size:.78rem">General</span>';
+  return `<span class="format-pill ${f==='T20'?'format-t20':f==='T40'?'format-t40':'format-both'}">${f}</span>`;
+}
+function toast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.className=`toast ${type}`;
+  t.innerHTML=`<strong>${type==='success'?'✓':'✕'}</strong> ${msg}`;
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function updateBadges(){
+  const y=G.activeYear;
+  ['dash','funding','expenses','players','settings'].forEach(id=>{
+    const el=document.getElementById(id+'-year-badge'); if(el) el.textContent=y;
+  });
+  const sfb=document.getElementById('save-fee-year'); if(sfb) sfb.textContent=y;
+}
+
+// ============================================================
+// PAGES
+// ============================================================
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>{ if(t.getAttribute('onclick').includes(`'${id}'`)) t.classList.add('active'); });
+  render(id);
+}
+
+function render(id){
+  if(id==='dashboard') renderDashboard();
+  if(id==='funding') renderFunding();
+  if(id==='expenses') renderExpenses();
+  if(id==='players') renderPlayers();
+  if(id==='settings') renderSettings();
+}
+
+function rerenderActive(){
+  const el=document.querySelector('.page.active'); if(!el) return;
+  render(el.id.replace('page-',''));
+}
+
+// ============================================================
+// MODALS
+// ============================================================
+function openModal(id){
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll(`#${id} input[type=date]`).forEach(f=>{ if(!f.value) f.value=today(); });
+  if(id==='modal-funding') fillPlayerDropdown();
+  if(id==='modal-player') updateFeePreview();
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('active');
+  const el=document.getElementById(id);
+  el.querySelectorAll('input:not([type=date])').forEach(i=>i.value='');
+  el.querySelectorAll('textarea').forEach(i=>i.value='');
+  el.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
+  togglePlayerField();
+}
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) closeModal(m.id); }));
+
+function togglePlayerField(){
+  const t=document.getElementById('f-type'); if(!t) return;
+  document.getElementById('f-player-field').style.display=t.value==='player'?'':'none';
+}
+function fillPlayerDropdown(){
+  const sel=document.getElementById('f-player-link');
+  sel.innerHTML='<option value="">-- Select player --</option>';
+  const f=fees();
+  yr().players.forEach(p=>{
+    const due=(f[p.format]||0)-(p.paid||0);
+    const o=document.createElement('option'); o.value=p.id;
+    o.textContent=`${p.name} (owes ${$fmt(due)})`; sel.appendChild(o);
+  });
+}
+function updateFeePreview(){
+  const fmt=document.getElementById('p-format'); if(!fmt) return;
+  const el=document.getElementById('fee-preview'); if(!el) return;
+  el.textContent=$fmt(fees()[fmt.value]||0);
+}
+
+// ============================================================
+// CRUD
+// ============================================================
+function addFunding(){
+  const type=document.getElementById('f-type').value;
+  const amount=parseFloat(document.getElementById('f-amount').value);
+  const name=document.getElementById('f-name').value.trim();
+  const date=document.getElementById('f-date').value;
+  const notes=document.getElementById('f-notes').value.trim();
+  const playerLink=document.getElementById('f-player-link').value;
+  if(!amount||amount<=0){toast('Enter a valid amount','error');return;}
+  if(!name){toast('Enter a name','error');return;}
+  const rec={id:uid(),type,amount,name,date,notes};
+  if(type==='player'&&playerLink){
+    const p=yr().players.find(x=>x.id===playerLink);
+    if(p){p.paid=(p.paid||0)+amount;rec.playerId=playerLink;rec.name=p.name;}
+  }
+  yr().funding.push(rec); save(); closeModal('modal-funding');
+  toast('Funding added'); renderFunding(); renderDashboard();
+}
+
+function addExpense(){
+  const category=document.getElementById('e-category').value;
+  const amount=parseFloat(document.getElementById('e-amount').value);
+  const desc=document.getElementById('e-desc').value.trim();
+  const format=document.getElementById('e-format').value;
+  const date=document.getElementById('e-date').value;
+  const notes=document.getElementById('e-notes').value.trim();
+  if(!amount||amount<=0){toast('Enter a valid amount','error');return;}
+  if(!desc){toast('Enter a description','error');return;}
+  yr().expenses.push({id:uid(),category,amount,desc,format,date,notes});
+  save(); closeModal('modal-expense');
+  toast('Expense recorded'); renderExpenses(); renderDashboard();
+}
+
+function addPlayer(){
+  const name=document.getElementById('p-name').value.trim();
+  const format=document.getElementById('p-format').value;
+  const paid=parseFloat(document.getElementById('p-paid').value)||0;
+  const notes=document.getElementById('p-notes').value.trim();
+  if(!name){toast('Enter player name','error');return;}
+  yr().players.push({id:uid(),name,format,paid,notes});
+  save(); closeModal('modal-player');
+  toast(`${name} added`); renderPlayers(); renderDashboard();
+}
+
+function deleteFunding(id){
+  if(!confirm('Delete this funding record?'))return;
+  yr().funding=yr().funding.filter(f=>f.id!==id);
+  save(); renderFunding(); renderDashboard(); toast('Deleted');
+}
+function deleteExpense(id){
+  if(!confirm('Delete this expense?'))return;
+  yr().expenses=yr().expenses.filter(e=>e.id!==id);
+  save(); renderExpenses(); renderDashboard(); toast('Deleted');
+}
+function deletePlayer(id){
+  if(!confirm('Remove this player?'))return;
+  yr().players=yr().players.filter(p=>p.id!==id);
+  save(); renderPlayers(); renderDashboard(); toast('Player removed');
+}
+
+function saveFees(){
+  const both=parseFloat(document.getElementById('fee-both').value);
+  const t20=parseFloat(document.getElementById('fee-t20').value);
+  const t40=parseFloat(document.getElementById('fee-t40').value);
+  if([both,t20,t40].some(v=>isNaN(v)||v<0)){toast('Enter valid amounts for all tiers','error');return;}
+  yr().fees={both,t20,t40}; save();
+  toast(`Fee tiers saved for ${G.activeYear}`);
+  renderPlayers(); renderDashboard(); renderSettings();
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderDashboard(){
+  updateBadges();
+  const s=yr(); const f=fees();
+  const collected=s.funding.reduce((a,x)=>a+x.amount,0);
+  const spent=s.expenses.reduce((a,x)=>a+x.amount,0);
+  const balance=collected-spent;
+  const due=s.players.reduce((a,p)=>a+(f[p.format]||0),0);
+  const paid=s.players.reduce((a,p)=>a+(p.paid||0),0);
+
+  document.getElementById('stat-collected').textContent=$fmt(collected);
+  document.getElementById('stat-spent').textContent=$fmt(spent);
+  document.getElementById('stat-balance').textContent=$fmt(balance);
+  document.getElementById('stat-pending').textContent=$fmt(Math.max(0,due-paid));
+
+  const pct=collected>0?Math.min(100,spent/collected*100):0;
+  document.getElementById('balance-bar').style.width=pct+'%';
+  document.getElementById('util-pct').textContent=Math.round(pct)+'%';
+  document.getElementById('bal-left').textContent=$fmt(spent)+' spent';
+  document.getElementById('bal-right').textContent=$fmt(collected)+' total';
+
+  // Expense cats
+  const cats={};
+  s.expenses.forEach(e=>{cats[e.category]=(cats[e.category]||0)+e.amount;});
+  const maxC=Math.max(...Object.values(cats),1);
+  const CC={food:'#f59e0b',water:'#38bdf8',electrolyte:'#34d399',umpire:'#a78bfa',registration:'#fb7185',party:'#fbbf24',other:'#9ca3af'};
+  const CL={food:'Food',water:'Water',electrolyte:'Electrolytes',umpire:'Umpiring',registration:'Registration',party:'Party',other:'Other'};
+  document.getElementById('cat-breakdown').innerHTML=Object.keys(cats).length===0
+    ?'<div class="empty-state"><div class="icon">📊</div>No expenses yet</div>'
+    :Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="cat-row"><div class="cat-label">${CL[k]||k}</div><div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${v/maxC*100}%;background:${CC[k]||'#9ca3af'}"></div></div><div class="cat-amount">${$fmt(v)}</div></div>`).join('');
+
+  // Funding src
+  const fs={sponsor:0,player:0,other:0};
+  s.funding.forEach(x=>{fs[x.type]=(fs[x.type]||0)+x.amount;});
+  const maxF=Math.max(...Object.values(fs),1);
+  const FC={sponsor:'#60a5fa',player:'#22c55e',other:'#9ca3af'};
+  const FL={sponsor:'Sponsors',player:'Players',other:'Other'};
+  document.getElementById('funding-breakdown').innerHTML=collected===0
+    ?'<div class="empty-state"><div class="icon">💰</div>No funding yet</div>'
+    :Object.entries(fs).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="cat-row"><div class="cat-label">${FL[k]}</div><div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${v/maxF*100}%;background:${FC[k]}"></div></div><div class="cat-amount">${$fmt(v)}</div></div>`).join('');
+
+  // Recent
+  const act=[...s.funding.map(x=>({...x,_t:'funding',_ts:new Date(x.date||0).getTime()})),...s.expenses.map(x=>({...x,_t:'expense',_ts:new Date(x.date||0).getTime()}))].sort((a,b)=>b._ts-a._ts).slice(0,8);
+  document.getElementById('recent-activity').innerHTML=act.length===0
+    ?'<div class="empty-state"><div class="icon">📋</div>No activity yet</div>'
+    :`<table class="data-table"><thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Amount</th></tr></thead><tbody>${act.map(a=>`<tr><td style="color:var(--text-dim);font-size:.82rem">${$date(a.date)}</td><td>${a._t==='funding'?a.name:a.desc}</td><td>${a._t==='funding'?tagHtml(a.type):tagHtml(a.category)}</td><td class="${a._t==='funding'?'amount-green':'amount-red'}">${a._t==='funding'?'+':'-'}${$fmt(a.amount)}</td></tr>`).join('')}</tbody></table>`;
+}
+
+function renderFunding(){
+  updateBadges();
+  const s=yr();
+  document.getElementById('funding-total-badge').textContent=$fmt(s.funding.reduce((a,f)=>a+f.amount,0));
+  const wrap=document.getElementById('funding-table-wrap');
+  if(!s.funding.length){wrap.innerHTML='<div class="empty-state"><div class="icon">💸</div>No funding added yet</div>';return;}
+  wrap.innerHTML=`<table class="data-table"><thead><tr><th>Date</th><th>Name</th><th>Type</th><th>Notes</th><th>Amount</th><th></th></tr></thead><tbody>${[...s.funding].sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).map(f=>`<tr><td style="color:var(--text-dim);font-size:.82rem;white-space:nowrap">${$date(f.date)}</td><td><strong>${f.name}</strong></td><td>${tagHtml(f.type)}</td><td style="color:var(--text-dim);font-size:.82rem">${f.notes||'—'}</td><td class="amount-green">+${$fmt(f.amount)}</td><td><button class="del-btn" onclick="deleteFunding('${f.id}')">🗑</button></td></tr>`).join('')}</tbody></table>`;
+}
+
+function renderExpenses(){
+  updateBadges();
+  const s=yr();
+  document.getElementById('expense-total-badge').textContent=$fmt(s.expenses.reduce((a,e)=>a+e.amount,0));
+  const wrap=document.getElementById('expense-table-wrap');
+  if(!s.expenses.length){wrap.innerHTML='<div class="empty-state"><div class="icon">🧾</div>No expenses added yet</div>';return;}
+  wrap.innerHTML=`<table class="data-table"><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Format</th><th>Notes</th><th>Amount</th><th></th></tr></thead><tbody>${[...s.expenses].sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).map(e=>`<tr><td style="color:var(--text-dim);font-size:.82rem;white-space:nowrap">${$date(e.date)}</td><td><strong>${e.desc}</strong></td><td>${tagHtml(e.category)}</td><td>${fmtPill(e.format)}</td><td style="color:var(--text-dim);font-size:.82rem">${e.notes||'—'}</td><td class="amount-red">-${$fmt(e.amount)}</td><td><button class="del-btn" onclick="deleteExpense('${e.id}')">🗑</button></td></tr>`).join('')}</tbody></table>`;
+}
+
+function renderPlayers(){
+  updateBadges();
+  const s=yr(); const f=fees();
+  const FL_LABEL={both:'T20 + T40',t20:'T20 Only',t40:'T40 Only'};
+  const FC={both:'format-both',t20:'format-t20',t40:'format-t40'};
+  document.getElementById('fee-tier-cards').innerHTML=`
+    <div class="stat-card green"><div class="stat-label">T20 + T40</div><div class="stat-value">${$fmt(f.both)}</div><div class="stat-sub">Both formats</div></div>
+    <div class="stat-card blue"><div class="stat-label">T20 Only</div><div class="stat-value" style="color:#60a5fa">${$fmt(f.t20)}</div><div class="stat-sub">Single format</div></div>
+    <div class="stat-card amber"><div class="stat-label">T40 Only</div><div class="stat-value">${$fmt(f.t40)}</div><div class="stat-sub">Single format</div></div>`;
+  const wrap=document.getElementById('player-cards-wrap');
+  if(!s.players.length){wrap.innerHTML='<div class="empty-state" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:3rem"><div class="icon">🏏</div>No players added yet</div>';return;}
+  wrap.innerHTML=`<div class="player-card-grid">${[...s.players].sort((a,b)=>a.name.localeCompare(b.name)).map(p=>{
+    const fee=f[p.format]||0,paid=p.paid||0,due=fee-paid;
+    const st=due<=0?'paid':paid>0?'partial':'unpaid';
+    const lbl=due<=0?'Paid ✓':`Owes ${$fmt(due)}`;
+    const ini=p.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    return `<div class="player-card"><div class="player-avatar">${ini}</div><div class="player-info"><div class="player-name">${p.name}</div><div class="player-meta"><span class="format-pill ${FC[p.format]}">${FL_LABEL[p.format]}</span>${p.notes?`<span style="margin-left:.3rem;color:var(--text-muted);font-size:.75rem">${p.notes}</span>`:''}</div></div><div class="player-amount"><div class="player-due ${st}">${lbl}</div><div class="player-due-label">${$fmt(paid)} / ${$fmt(fee)}</div><button class="del-btn btn-sm" onclick="deletePlayer('${p.id}')" style="margin-top:.3rem">🗑</button></div></div>`;
+  }).join('')}</div>`;
+}
+
+function renderSettings(){
+  updateBadges();
+  const f=fees();
+  document.getElementById('fee-both').value=f.both;
+  document.getElementById('fee-t20').value=f.t20;
+  document.getElementById('fee-t40').value=f.t40;
+  const sfb=document.getElementById('save-fee-year'); if(sfb) sfb.textContent=G.activeYear;
+
+  const years=Object.keys(G.years).sort((a,b)=>b-a);
+  document.getElementById('year-list').innerHTML=years.map(y=>{
+    const d=G.years[y];
+    const col=(d.funding||[]).reduce((s,x)=>s+x.amount,0);
+    const sp=(d.expenses||[]).reduce((s,x)=>s+x.amount,0);
+    const pl=(d.players||[]).length;
+    const active=y===G.activeYear;
+    return `<div class="year-list-row${active?' active-year':''}">
+      <div><div class="year-list-name">${y}${active?' ← current':''}</div><div class="year-list-stats">${pl} players · ${$fmt(col)} collected · ${$fmt(sp)} spent</div></div>
+      <div class="year-list-actions">
+        ${!active?`<button class="btn btn-ghost btn-sm" onclick="switchYear('${y}')">Switch</button>`:''}
+        ${years.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteYear('${y}')">Delete</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+buildYearSelect(); updateBadges(); renderDashboard();
+</script>
+</body>
+</html>
