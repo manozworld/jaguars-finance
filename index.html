@@ -6,85 +6,90 @@
 <title>Cricket Team Finance</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0f0d; --surface: #111a15; --surface2: #162019; --border: #1e3028;
-    --green: #22c55e; --green-dim: #16a34a; --green-glow: rgba(34,197,94,0.15);
-    --red: #ef4444; --amber: #f59e0b; --text: #e8f5e9;
-    --text-dim: #6b8f74; --text-muted: #3d5e46; --accent: #4ade80;
+  :root{
+    --bg:#0a0f0d;--surface:#111a15;--surface2:#162019;--border:#1e3028;
+    --green:#22c55e;--green-dim:#16a34a;--green-glow:rgba(34,197,94,.15);
+    --red:#ef4444;--amber:#f59e0b;--text:#e8f5e9;
+    --text-dim:#6b8f74;--text-muted:#3d5e46;--accent:#4ade80;--purple:#a78bfa;
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
-  body::before { content:''; position:fixed; inset:0; background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(34,197,94,.06) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(34,197,94,.04) 0%,transparent 50%); pointer-events:none; z-index:0; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(34,197,94,.06) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(34,197,94,.04) 0%,transparent 50%);pointer-events:none;z-index:0;}
 
-  nav { position:sticky; top:0; z-index:100; background:rgba(10,15,13,.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:0 1.5rem; display:flex; align-items:center; height:60px; gap:0.5rem; }
-  .nav-brand { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:2px; color:var(--accent); margin-right:1rem; display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
-  .nav-brand span { color:var(--text-dim); font-size:.85rem; letter-spacing:1px; font-family:'DM Sans',sans-serif; font-weight:300; }
-  .nav-tabs { display:flex; gap:.2rem; flex:1; }
-  .nav-tab { padding:.4rem 1rem; border:none; background:transparent; color:var(--text-dim); font-family:'DM Sans',sans-serif; font-size:.83rem; font-weight:500; cursor:pointer; border-radius:6px; transition:all .2s; white-space:nowrap; }
-  .nav-tab:hover { background:var(--surface2); color:var(--text); }
-  .nav-tab.active { background:var(--green-glow); color:var(--accent); border:1px solid rgba(74,222,128,.2); }
-  .year-switcher { display:flex; align-items:center; gap:.4rem; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:.3rem .7rem; margin-left:auto; white-space:nowrap; }
-  .year-switcher label { font-size:.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); }
-  .year-switcher select { background:transparent; border:none; color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:.9rem; font-weight:600; cursor:pointer; outline:none; padding:0; }
-  .year-switcher select option { background:#111a15; }
-  .btn-new-year { background:none; border:1px solid var(--border); color:var(--text-dim); border-radius:5px; padding:.15rem .5rem; font-size:.75rem; cursor:pointer; transition:all .2s; font-family:'DM Sans',sans-serif; }
-  .btn-new-year:hover { background:var(--green-glow); color:var(--accent); border-color:rgba(74,222,128,.3); }
+  nav{position:sticky;top:0;z-index:100;background:rgba(10,15,13,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;height:60px;gap:.5rem;}
+  .nav-brand{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;color:var(--accent);margin-right:1rem;display:flex;align-items:center;gap:.5rem;white-space:nowrap;}
+  .nav-brand span{color:var(--text-dim);font-size:.85rem;letter-spacing:1px;font-family:'DM Sans',sans-serif;font-weight:300;}
+  .nav-tabs{display:flex;gap:.2rem;flex:1;flex-wrap:wrap;}
+  .nav-tab{padding:.4rem .9rem;border:none;background:transparent;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;border-radius:6px;transition:all .2s;white-space:nowrap;position:relative;}
+  .nav-tab:hover{background:var(--surface2);color:var(--text);}
+  .nav-tab.active{background:var(--green-glow);color:var(--accent);border:1px solid rgba(74,222,128,.2);}
+  .nav-badge{position:absolute;top:2px;right:2px;background:var(--amber);color:#0a0f0d;border-radius:99px;font-size:.58rem;font-weight:700;padding:0 .35rem;min-width:14px;text-align:center;line-height:14px;}
+  .year-switcher{display:flex;align-items:center;gap:.4rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.3rem .7rem;margin-left:auto;white-space:nowrap;}
+  .year-switcher label{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);}
+  .year-switcher select{background:transparent;border:none;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:.9rem;font-weight:600;cursor:pointer;outline:none;padding:0;}
+  .year-switcher select option{background:#111a15;}
+  .btn-new-year{background:none;border:1px solid var(--border);color:var(--text-dim);border-radius:5px;padding:.15rem .5rem;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+  .btn-new-year:hover{background:var(--green-glow);color:var(--accent);border-color:rgba(74,222,128,.3);}
 
-  .page { display:none; padding:2rem; max-width:1200px; margin:0 auto; position:relative; z-index:1; }
-  .page.active { display:block; animation:fadeIn .3s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .page{display:none;padding:2rem;max-width:1200px;margin:0 auto;position:relative;z-index:1;}
+  .page.active{display:block;animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-  .page-title { font-family:'Bebas Neue',sans-serif; font-size:2.8rem; letter-spacing:3px; color:var(--text); margin-bottom:.25rem; }
-  .page-subtitle { color:var(--text-dim); font-size:.9rem; margin-bottom:2rem; }
-  .year-badge { display:inline-flex; align-items:center; background:var(--green-glow); border:1px solid rgba(74,222,128,.2); border-radius:6px; padding:.2rem .7rem; font-family:'JetBrains Mono',monospace; font-size:.85rem; color:var(--accent); font-weight:600; }
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:3px;color:var(--text);margin-bottom:.25rem;}
+  .page-subtitle{color:var(--text-dim);font-size:.9rem;margin-bottom:2rem;}
+  .year-badge{display:inline-flex;align-items:center;background:var(--green-glow);border:1px solid rgba(74,222,128,.2);border-radius:6px;padding:.2rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent);font-weight:600;}
 
-  .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-bottom:2rem; }
-  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.4rem 1.6rem; position:relative; overflow:hidden; transition:border-color .2s; }
-  .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; border-radius:12px 12px 0 0; }
-  .stat-card.green::before{background:var(--green)} .stat-card.red::before{background:var(--red)} .stat-card.amber::before{background:var(--amber)} .stat-card.blue::before{background:#60a5fa}
-  .stat-card:hover { border-color:var(--text-muted); }
-  .stat-label { font-size:.72rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-dim); margin-bottom:.5rem; }
-  .stat-value { font-family:'JetBrains Mono',monospace; font-size:2rem; font-weight:600; line-height:1; margin-bottom:.3rem; }
-  .stat-card.green .stat-value{color:var(--green)} .stat-card.red .stat-value{color:var(--red)} .stat-card.amber .stat-value{color:var(--amber)} .stat-card.blue .stat-value{color:#60a5fa}
-  .stat-sub { font-size:.78rem; color:var(--text-muted); }
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.4rem 1.6rem;position:relative;overflow:hidden;transition:border-color .2s;}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:12px 12px 0 0;}
+  .stat-card.green::before{background:var(--green)}.stat-card.red::before{background:var(--red)}.stat-card.amber::before{background:var(--amber)}.stat-card.blue::before{background:#60a5fa}.stat-card.purple::before{background:var(--purple)}
+  .stat-card:hover{border-color:var(--text-muted);}
+  .stat-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:.5rem;}
+  .stat-value{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:600;line-height:1;margin-bottom:.3rem;}
+  .stat-card.green .stat-value{color:var(--green)}.stat-card.red .stat-value{color:var(--red)}.stat-card.amber .stat-value{color:var(--amber)}.stat-card.blue .stat-value{color:#60a5fa}.stat-card.purple .stat-value{color:var(--purple)}
+  .stat-sub{font-size:.78rem;color:var(--text-muted);}
 
-  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
   @media(max-width:768px){.two-col{grid-template-columns:1fr}}
 
-  .section-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
-  .section-header { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.4rem; border-bottom:1px solid var(--border); }
-  .section-title { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:2px; color:var(--accent); }
-  .badge { font-family:'JetBrains Mono',monospace; font-size:.72rem; padding:.2rem .6rem; border-radius:20px; font-weight:600; }
-  .badge-green{background:rgba(34,197,94,.15);color:var(--green)} .badge-red{background:rgba(239,68,68,.15);color:var(--red)}
+  .section-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .section-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.4rem;border-bottom:1px solid var(--border);}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--accent);}
+  .badge{font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:.2rem .6rem;border-radius:20px;font-weight:600;}
+  .badge-green{background:rgba(34,197,94,.15);color:var(--green)}.badge-red{background:rgba(239,68,68,.15);color:var(--red)}.badge-amber{background:rgba(245,158,11,.15);color:var(--amber)}.badge-purple{background:rgba(167,139,250,.15);color:var(--purple)}
 
-  .data-table { width:100%; border-collapse:collapse; }
-  .data-table th { font-size:.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted); padding:.7rem 1.4rem; text-align:left; border-bottom:1px solid var(--border); background:var(--surface2); }
-  .data-table td { padding:.8rem 1.4rem; font-size:.88rem; border-bottom:1px solid rgba(30,48,40,.5); vertical-align:middle; }
-  .data-table tr:last-child td{border-bottom:none} .data-table tr:hover td{background:rgba(34,197,94,.03)}
+  .data-table{width:100%;border-collapse:collapse;}
+  .data-table th{font-size:.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);padding:.7rem 1.4rem;text-align:left;border-bottom:1px solid var(--border);background:var(--surface2);}
+  .data-table td{padding:.75rem 1.4rem;font-size:.88rem;border-bottom:1px solid rgba(30,48,40,.5);vertical-align:middle;}
+  .data-table tr:last-child td{border-bottom:none}.data-table tr:hover td{background:rgba(34,197,94,.03)}
   .amount-green{font-family:'JetBrains Mono',monospace;color:var(--green);font-weight:600}
   .amount-red{font-family:'JetBrains Mono',monospace;color:var(--red);font-weight:600}
+  .amount-purple{font-family:'JetBrains Mono',monospace;color:var(--purple);font-weight:600}
 
-  .tag { display:inline-block; font-size:.68rem; padding:.15rem .5rem; border-radius:4px; text-transform:uppercase; letter-spacing:.5px; font-weight:600; }
-  .tag-sponsor{background:rgba(96,165,250,.15);color:#60a5fa} .tag-player{background:rgba(34,197,94,.15);color:var(--green)}
-  .tag-food{background:rgba(245,158,11,.15);color:var(--amber)} .tag-umpire{background:rgba(167,139,250,.15);color:#a78bfa}
-  .tag-registration{background:rgba(251,113,133,.15);color:#fb7185} .tag-water{background:rgba(56,189,248,.15);color:#38bdf8}
-  .tag-electrolyte{background:rgba(52,211,153,.15);color:#34d399} .tag-party{background:rgba(251,191,36,.15);color:#fbbf24}
-  .tag-other{background:rgba(107,114,128,.15);color:#9ca3af}
+  .tag{display:inline-block;font-size:.68rem;padding:.15rem .5rem;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;background:rgba(107,114,128,.15);color:#9ca3af;}
 
-  .form-grid { display:grid; gap:1rem; padding:1.5rem; }
-  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .status-pending{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;padding:.2rem .6rem;border-radius:20px;font-weight:600;background:rgba(245,158,11,.15);color:var(--amber);}
+  .status-received{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;padding:.2rem .6rem;border-radius:20px;font-weight:600;background:rgba(34,197,94,.15);color:var(--green);}
+  .status-overdue{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;padding:.2rem .6rem;border-radius:20px;font-weight:600;background:rgba(239,68,68,.15);color:var(--red);}
+
+  .btn-mark-paid{display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .7rem;border-radius:6px;border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.08);color:var(--green);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
+  .btn-mark-paid:hover{background:rgba(34,197,94,.2);border-color:var(--green);transform:translateY(-1px);}
+
+  .form-grid{display:grid;gap:1rem;padding:1.5rem;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
   @media(max-width:600px){.form-row{grid-template-columns:1fr}}
-  .form-group { display:flex; flex-direction:column; gap:.4rem; }
-  label { font-size:.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); font-weight:500; }
-  input,select,textarea { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:.65rem .9rem; color:var(--text); font-family:'DM Sans',sans-serif; font-size:.9rem; transition:border-color .2s,box-shadow .2s; outline:none; width:100%; }
-  input:focus,select:focus,textarea:focus { border-color:var(--green-dim); box-shadow:0 0 0 3px var(--green-glow); }
-  select option{background:#111a15} textarea{resize:vertical;min-height:80px}
+  .form-group{display:flex;flex-direction:column;gap:.4rem;}
+  label{font-size:.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);font-weight:500;}
+  input,select,textarea{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;transition:border-color .2s,box-shadow .2s;outline:none;width:100%;}
+  input:focus,select:focus,textarea:focus{border-color:var(--green-dim);box-shadow:0 0 0 3px var(--green-glow);}
+  select option{background:#111a15}textarea{resize:vertical;min-height:80px}
 
-  .btn { display:inline-flex; align-items:center; gap:.4rem; padding:.65rem 1.4rem; border-radius:8px; border:none; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:600; cursor:pointer; transition:all .2s; }
-  .btn-primary{background:var(--green);color:#0a0f0d} .btn-primary:hover{background:var(--accent);transform:translateY(-1px);box-shadow:0 4px 20px rgba(34,197,94,.3)}
-  .btn-danger{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.2)} .btn-danger:hover{background:rgba(239,68,68,.25)}
-  .btn-ghost{background:transparent;color:var(--text-dim);border:1px solid var(--border)} .btn-ghost:hover{background:var(--surface2);color:var(--text)}
+  .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.4rem;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;}
+  .btn-primary{background:var(--green);color:#0a0f0d}.btn-primary:hover{background:var(--accent);transform:translateY(-1px);box-shadow:0 4px 20px rgba(34,197,94,.3)}
+  .btn-danger{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.2)}.btn-danger:hover{background:rgba(239,68,68,.25)}
+  .btn-ghost{background:transparent;color:var(--text-dim);border:1px solid var(--border)}.btn-ghost:hover{background:var(--surface2);color:var(--text)}
   .btn-sm{padding:.3rem .7rem;font-size:.78rem}
+  .btn-icon{background:none;border:none;cursor:pointer;padding:.2rem .4rem;border-radius:4px;transition:all .2s;font-size:.9rem;}
 
   .balance-bar-wrap{padding:1.4rem}
   .balance-labels{display:flex;justify-content:space-between;font-size:.78rem;color:var(--text-dim);margin-bottom:.5rem}
@@ -110,10 +115,14 @@
   .modal-close{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:1.3rem;transition:color .2s}
   .modal-close:hover{color:var(--text)}
   .modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.6rem}
+  .mark-paid-info{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.5rem}
+  .mark-paid-info .mpi-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:.3rem}
+  .mark-paid-info .mpi-val{font-size:.95rem;font-weight:600;color:var(--text)}
+  .mark-paid-info .mpi-amount{font-family:'JetBrains Mono',monospace;font-size:1.4rem;color:var(--green);font-weight:600}
 
   .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.8rem 1.2rem;font-size:.88rem;z-index:9999;display:flex;align-items:center;gap:.6rem;transform:translateY(100px);opacity:0;transition:all .3s ease;box-shadow:0 8px 32px rgba(0,0,0,.4)}
   .toast.show{transform:translateY(0);opacity:1}
-  .toast.success{border-left:3px solid var(--green)} .toast.error{border-left:3px solid var(--red)}
+  .toast.success{border-left:3px solid var(--green)}.toast.error{border-left:3px solid var(--red)}.toast.info{border-left:3px solid var(--purple)}
 
   .player-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
   .player-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;display:flex;align-items:center;gap:1rem;transition:border-color .2s}
@@ -124,17 +133,15 @@
   .player-meta{font-size:.78rem;color:var(--text-dim)}
   .player-amount{text-align:right}
   .player-due{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600}
-  .player-due.paid{color:var(--green)} .player-due.partial{color:var(--amber)} .player-due.unpaid{color:var(--red)}
+  .player-due.paid{color:var(--green)}.player-due.partial{color:var(--amber)}.player-due.unpaid{color:var(--red)}
   .player-due-label{font-size:.7rem;color:var(--text-muted)}
 
-  ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-
+  ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
   .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
   .top-bar-left{display:flex;flex-direction:column;gap:.1rem}
   .del-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;padding:.2rem .4rem;border-radius:4px;transition:all .2s}
   .del-btn:hover{color:var(--red);background:rgba(239,68,68,.1)}
-  .format-pill{font-size:.7rem;padding:.1rem .45rem;border-radius:4px;font-weight:600;letter-spacing:.5px}
-  .format-t20{background:rgba(96,165,250,.15);color:#60a5fa} .format-t40{background:rgba(167,139,250,.15);color:#a78bfa} .format-both{background:rgba(34,197,94,.15);color:var(--green)}
+  .format-pill{font-size:.7rem;padding:.1rem .45rem;border-radius:4px;font-weight:600;letter-spacing:.5px;background:rgba(107,114,128,.15);color:#9ca3af;}
 
   /* SETTINGS */
   .settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
@@ -149,15 +156,38 @@
   .setting-input-wrap{display:flex;align-items:center;gap:.4rem}
   .setting-input-wrap span{color:var(--text-dim);font-size:.9rem}
   .setting-input{width:90px!important;text-align:right;font-family:'JetBrains Mono',monospace!important;font-size:.95rem!important;padding:.4rem .6rem!important}
-
   .year-list{display:flex;flex-direction:column;gap:.5rem}
   .year-list-row{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;background:var(--surface2);border-radius:8px;border:1px solid var(--border)}
   .year-list-row.active-year{border-color:rgba(74,222,128,.3);background:var(--green-glow)}
   .year-list-name{font-family:'JetBrains Mono',monospace;font-size:.95rem;color:var(--text);font-weight:600}
   .year-list-stats{font-size:.78rem;color:var(--text-dim);margin-top:.1rem}
   .year-list-actions{display:flex;gap:.4rem;align-items:center;flex-shrink:0}
-
   .fee-preview-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:.95rem}
+
+  /* CUSTOM ITEMS (categories / formats / sources) */
+  .custom-item-list{display:flex;flex-direction:column;gap:.4rem;}
+  .custom-item{display:flex;align-items:center;justify-content:space-between;padding:.55rem .8rem;background:var(--bg);border:1px solid var(--border);border-radius:7px;font-size:.85rem;}
+  .custom-item-name{display:flex;align-items:center;gap:.5rem;color:var(--text);}
+  .custom-item-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .custom-item-builtin{font-size:.65rem;color:var(--text-muted);background:var(--surface2);padding:.1rem .4rem;border-radius:3px;letter-spacing:.5px;}
+  .custom-item-actions{display:flex;gap:.25rem;}
+  .btn-icon:hover{background:rgba(239,68,68,.1);color:var(--red);}
+  .add-custom-row{display:flex;gap:.5rem;align-items:center;}
+  .add-custom-row input{flex:1;padding:.5rem .7rem;font-size:.85rem;}
+  .add-custom-row .color-pick{width:36px;height:36px;padding:2px;border-radius:7px;cursor:pointer;border:1px solid var(--border);background:var(--bg);}
+
+  /* PLANNED */
+  .filter-tabs{display:flex;gap:.3rem;margin-bottom:1.2rem;flex-wrap:wrap;}
+  .filter-tab{padding:.35rem .9rem;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;border-radius:6px;transition:all .2s;}
+  .filter-tab:hover{background:var(--surface2);color:var(--text);}
+  .filter-tab.active{background:var(--green-glow);color:var(--accent);border-color:rgba(74,222,128,.3);}
+  .filter-tab .count{display:inline-block;background:rgba(245,158,11,.2);color:var(--amber);border-radius:99px;font-size:.65rem;font-weight:700;padding:0 .35rem;margin-left:.3rem;min-width:16px;text-align:center;}
+  .filter-tab.active .count{background:rgba(74,222,128,.2);color:var(--accent);}
+  .data-table tr.row-received td{opacity:.55;}
+  .data-table tr.row-received td:first-child{border-left:2px solid var(--green);}
+  .data-table tr.row-overdue td:first-child{border-left:2px solid var(--red);}
+  .info-box{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:8px;padding:.8rem 1rem;font-size:.82rem;color:var(--text-dim);line-height:1.6;margin-bottom:1.2rem;}
+  .info-box strong{color:var(--purple);}
 </style>
 </head>
 <body>
@@ -166,6 +196,7 @@
   <div class="nav-brand">🏏 CRICKET FUNDS <span>/ FINANCE</span></div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('dashboard')">Dashboard</button>
+    <button class="nav-tab" onclick="showPage('planned')">Planned <span class="nav-badge" id="planned-nav-badge" style="display:none">0</span></button>
     <button class="nav-tab" onclick="showPage('funding')">Funding</button>
     <button class="nav-tab" onclick="showPage('expenses')">Expenses</button>
     <button class="nav-tab" onclick="showPage('players')">Players</button>
@@ -187,10 +218,11 @@
     </div>
   </div>
   <div class="stats-grid">
-    <div class="stat-card green"><div class="stat-label">Total Collected</div><div class="stat-value" id="stat-collected">$0</div><div class="stat-sub">Players + Sponsors</div></div>
+    <div class="stat-card green"><div class="stat-label">Total Collected</div><div class="stat-value" id="stat-collected">$0</div><div class="stat-sub">All funding received</div></div>
     <div class="stat-card red"><div class="stat-label">Total Spent</div><div class="stat-value" id="stat-spent">$0</div><div class="stat-sub">All expenses</div></div>
     <div class="stat-card amber"><div class="stat-label">Balance</div><div class="stat-value" id="stat-balance">$0</div><div class="stat-sub">Remaining funds</div></div>
-    <div class="stat-card blue"><div class="stat-label">Pending Payments</div><div class="stat-value" id="stat-pending">$0</div><div class="stat-sub">From players</div></div>
+    <div class="stat-card blue"><div class="stat-label">Player Dues</div><div class="stat-value" id="stat-pending">$0</div><div class="stat-sub">Outstanding from players</div></div>
+    <div class="stat-card purple"><div class="stat-label">Planned Incoming</div><div class="stat-value" id="stat-planned">$0</div><div class="stat-sub">Expected, not yet received</div></div>
   </div>
   <div class="section-card" style="margin-bottom:1.5rem">
     <div class="section-header"><div class="section-title">BUDGET UTILIZATION</div><span class="badge badge-green" id="util-pct">0%</span></div>
@@ -199,14 +231,42 @@
       <div class="balance-bar-bg"><div class="balance-bar-fill" id="balance-bar" style="width:0%"></div></div>
     </div>
   </div>
-  <div class="two-col">
+  <div class="two-col" style="margin-bottom:1.5rem">
     <div class="section-card"><div class="section-header"><div class="section-title">EXPENSE BREAKDOWN</div></div><div class="category-list" id="cat-breakdown"><div class="empty-state"><div class="icon">📊</div>No expenses yet</div></div></div>
     <div class="section-card"><div class="section-header"><div class="section-title">FUNDING SOURCES</div></div><div class="category-list" id="funding-breakdown"><div class="empty-state"><div class="icon">💰</div>No funding yet</div></div></div>
   </div>
-  <div class="section-card" style="margin-top:1.5rem">
+  <div class="section-card" style="margin-bottom:1.5rem">
+    <div class="section-header"><div class="section-title">UPCOMING PLANNED PAYMENTS</div><span class="badge badge-purple" id="dash-planned-count">0 pending</span></div>
+    <div id="dash-planned-list"><div class="empty-state"><div class="icon">📅</div>No pending planned payments</div></div>
+  </div>
+  <div class="section-card">
     <div class="section-header"><div class="section-title">RECENT ACTIVITY</div></div>
     <div id="recent-activity"><div class="empty-state"><div class="icon">📋</div>No activity yet</div></div>
   </div>
+</div>
+
+<!-- PLANNED -->
+<div class="page" id="page-planned">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="page-title">PLANNED PAYMENTS</div>
+      <div class="page-subtitle">Expected incoming funds &nbsp;<span class="year-badge" id="planned-year-badge"></span></div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-planned')">+ Add Planned Payment</button>
+  </div>
+  <div class="info-box"><strong>How it works:</strong> Add any payment you're expecting. Once received, hit <strong>Mark as Received</strong> — it automatically adds to your Funding records.</div>
+  <div class="stats-grid" style="margin-bottom:1.5rem">
+    <div class="stat-card purple"><div class="stat-label">Pending</div><div class="stat-value" id="pl-stat-pending">$0</div><div class="stat-sub">Not yet received</div></div>
+    <div class="stat-card green"><div class="stat-label">Received</div><div class="stat-value" id="pl-stat-received">$0</div><div class="stat-sub">Marked as paid</div></div>
+    <div class="stat-card red"><div class="stat-label">Overdue</div><div class="stat-value" id="pl-stat-overdue">$0</div><div class="stat-sub">Past expected date</div></div>
+  </div>
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="setPlannedFilter('all',this)">All <span class="count" id="ftc-all">0</span></button>
+    <button class="filter-tab" onclick="setPlannedFilter('pending',this)">Pending <span class="count" id="ftc-pending">0</span></button>
+    <button class="filter-tab" onclick="setPlannedFilter('overdue',this)">Overdue <span class="count" id="ftc-overdue">0</span></button>
+    <button class="filter-tab" onclick="setPlannedFilter('received',this)">Received <span class="count" id="ftc-received">0</span></button>
+  </div>
+  <div class="section-card"><div id="planned-table-wrap"><div class="empty-state"><div class="icon">📅</div>No planned payments yet</div></div></div>
 </div>
 
 <!-- FUNDING -->
@@ -214,7 +274,7 @@
   <div class="top-bar">
     <div class="top-bar-left">
       <div class="page-title">FUNDING</div>
-      <div class="page-subtitle">Sponsors &amp; player payments &nbsp;<span class="year-badge" id="funding-year-badge"></span></div>
+      <div class="page-subtitle">All money received &nbsp;<span class="year-badge" id="funding-year-badge"></span></div>
     </div>
     <button class="btn btn-primary" onclick="openModal('modal-funding')">+ Add Funding</button>
   </div>
@@ -257,19 +317,20 @@
   <div class="top-bar">
     <div class="top-bar-left">
       <div class="page-title">SETTINGS</div>
-      <div class="page-subtitle">Fee tiers &amp; season management</div>
+      <div class="page-subtitle">Fees, custom categories, formats, sources &amp; seasons</div>
     </div>
   </div>
   <div class="settings-grid">
+
     <!-- FEE TIERS -->
     <div class="settings-section">
       <div class="settings-section-header">
         <div class="settings-section-title">PLAYER FEE TIERS</div>
-        <div class="settings-section-sub">Fees for season &nbsp;<span class="year-badge" id="settings-year-badge" style="font-size:.72rem;padding:.1rem .5rem"></span></div>
+        <div class="settings-section-sub">For season &nbsp;<span class="year-badge" id="settings-year-badge" style="font-size:.72rem;padding:.1rem .5rem"></span></div>
       </div>
       <div class="settings-body">
         <div class="setting-row">
-          <div><div class="setting-row-label">T20 + T40 (Both)</div><div class="setting-row-sub">Plays in both formats</div></div>
+          <div><div class="setting-row-label">T20 + T40 (Both)</div><div class="setting-row-sub">Plays both formats</div></div>
           <div class="setting-input-wrap"><span>$</span><input class="setting-input" type="number" id="fee-both" min="0" step="1"></div>
         </div>
         <div class="setting-row">
@@ -280,8 +341,56 @@
           <div><div class="setting-row-label">T40 Only</div><div class="setting-row-sub">Single format — T40</div></div>
           <div class="setting-input-wrap"><span>$</span><input class="setting-input" type="number" id="fee-t40" min="0" step="1"></div>
         </div>
-        <p style="font-size:.78rem;color:var(--text-muted);line-height:1.5">These fees apply only to the currently selected season. New seasons copy fees from the active season.</p>
+        <p style="font-size:.78rem;color:var(--text-muted);line-height:1.5">These fees apply only to the selected season.</p>
         <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="saveFees()">Save Fee Tiers for <span id="save-fee-year"></span></button>
+      </div>
+    </div>
+
+    <!-- EXPENSE CATEGORIES -->
+    <div class="settings-section">
+      <div class="settings-section-header">
+        <div class="settings-section-title">EXPENSE CATEGORIES</div>
+        <div class="settings-section-sub">Used in expense forms and dashboard charts</div>
+      </div>
+      <div class="settings-body">
+        <div class="custom-item-list" id="cat-list"></div>
+        <div class="add-custom-row">
+          <input type="text" id="new-cat-name" placeholder="Category name (e.g. Transport)" maxlength="30">
+          <input type="color" id="new-cat-color" class="color-pick" value="#60a5fa" title="Pick a colour">
+          <button class="btn btn-primary btn-sm" onclick="addCustomCat()">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME FORMATS -->
+    <div class="settings-section">
+      <div class="settings-section-header">
+        <div class="settings-section-title">GAME FORMATS</div>
+        <div class="settings-section-sub">Used in expense forms and player page</div>
+      </div>
+      <div class="settings-body">
+        <div class="custom-item-list" id="format-list"></div>
+        <div class="add-custom-row">
+          <input type="text" id="new-fmt-name" placeholder="Format name (e.g. T10)" maxlength="20">
+          <input type="color" id="new-fmt-color" class="color-pick" value="#34d399" title="Pick a colour">
+          <button class="btn btn-primary btn-sm" onclick="addCustomFormat()">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FUNDING SOURCE TYPES -->
+    <div class="settings-section">
+      <div class="settings-section-header">
+        <div class="settings-section-title">FUNDING SOURCE TYPES</div>
+        <div class="settings-section-sub">Used in funding &amp; planned payment forms</div>
+      </div>
+      <div class="settings-body">
+        <div class="custom-item-list" id="source-list"></div>
+        <div class="add-custom-row">
+          <input type="text" id="new-src-name" placeholder="Source type (e.g. Fundraiser)" maxlength="30">
+          <input type="color" id="new-src-color" class="color-pick" value="#f59e0b" title="Pick a colour">
+          <button class="btn btn-primary btn-sm" onclick="addCustomSource()">+ Add</button>
+        </div>
       </div>
     </div>
 
@@ -289,13 +398,45 @@
     <div class="settings-section">
       <div class="settings-section-header">
         <div class="settings-section-title">SEASON MANAGEMENT</div>
-        <div class="settings-section-sub">Each season stores its own data independently</div>
+        <div class="settings-section-sub">Each season stores data independently</div>
       </div>
       <div class="settings-body">
         <div class="year-list" id="year-list"></div>
         <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="promptNewYear()">+ Create New Season</button>
       </div>
     </div>
+
+  </div>
+</div>
+
+<!-- MODAL: PLANNED -->
+<div class="modal-overlay" id="modal-planned">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">ADD PLANNED PAYMENT</div><button class="modal-close" onclick="closeModal('modal-planned')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="form-group"><label>Payment Type</label><select id="pl-type"></select></div>
+        <div class="form-group"><label>Expected Amount ($)</label><input type="number" id="pl-amount" placeholder="0.00" min="0" step="0.01"></div>
+      </div>
+      <div class="form-group"><label>From (Name / Description)</label><input type="text" id="pl-name" placeholder="Sponsor name or player name"></div>
+      <div class="form-group"><label>Expected Date</label><input type="date" id="pl-due-date"></div>
+      <div class="form-group"><label>Notes</label><textarea id="pl-notes" placeholder="Any details..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-planned')">Cancel</button><button class="btn btn-primary" onclick="addPlanned()">Add Planned Payment</button></div>
+  </div>
+</div>
+
+<!-- MODAL: MARK AS RECEIVED -->
+<div class="modal-overlay" id="modal-mark-paid">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">MARK AS RECEIVED</div><button class="modal-close" onclick="closeModal('modal-mark-paid')">✕</button></div>
+    <div class="form-grid">
+      <div id="mpr-info" class="mark-paid-info"></div>
+      <div class="form-group"><label>Actual Amount Received ($)</label><input type="number" id="mpr-amount" placeholder="0.00" min="0" step="0.01"></div>
+      <div class="form-group"><label>Date Received</label><input type="date" id="mpr-date"></div>
+      <div class="form-group"><label>Notes (optional)</label><textarea id="mpr-notes" placeholder="Any notes..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-mark-paid')">Cancel</button><button class="btn btn-primary" onclick="confirmMarkPaid()">✓ Confirm &amp; Add to Funding</button></div>
   </div>
 </div>
 
@@ -305,7 +446,7 @@
     <div class="modal-header"><div class="modal-title">ADD FUNDING</div><button class="modal-close" onclick="closeModal('modal-funding')">✕</button></div>
     <div class="form-grid">
       <div class="form-row">
-        <div class="form-group"><label>Source Type</label><select id="f-type" onchange="togglePlayerField()"><option value="sponsor">Sponsor</option><option value="player">Player Payment</option><option value="other">Other</option></select></div>
+        <div class="form-group"><label>Source Type</label><select id="f-type" onchange="togglePlayerField()"></select></div>
         <div class="form-group"><label>Amount ($)</label><input type="number" id="f-amount" placeholder="0.00" min="0" step="0.01"></div>
       </div>
       <div class="form-group"><label>Name / Description</label><input type="text" id="f-name" placeholder="Sponsor or player name"></div>
@@ -323,12 +464,12 @@
     <div class="modal-header"><div class="modal-title">ADD EXPENSE</div><button class="modal-close" onclick="closeModal('modal-expense')">✕</button></div>
     <div class="form-grid">
       <div class="form-row">
-        <div class="form-group"><label>Category</label><select id="e-category"><option value="food">Food (Game)</option><option value="water">Water</option><option value="electrolyte">Electrolytes</option><option value="umpire">Umpiring</option><option value="registration">Team Registration</option><option value="party">Party / Celebration</option><option value="other">Other</option></select></div>
+        <div class="form-group"><label>Category</label><select id="e-category"></select></div>
         <div class="form-group"><label>Amount ($)</label><input type="number" id="e-amount" placeholder="0.00" min="0" step="0.01"></div>
       </div>
       <div class="form-group"><label>Description</label><input type="text" id="e-desc" placeholder="What was this expense for?"></div>
       <div class="form-row">
-        <div class="form-group"><label>Format (if game-related)</label><select id="e-format"><option value="general">General</option><option value="T20">T20</option><option value="T40">T40</option></select></div>
+        <div class="form-group"><label>Format (if game-related)</label><select id="e-format"></select></div>
         <div class="form-group"><label>Date</label><input type="date" id="e-date"></div>
       </div>
       <div class="form-group"><label>Notes</label><textarea id="e-notes" placeholder="Any notes..."></textarea></div>
@@ -356,127 +497,237 @@
 
 <script>
 // ============================================================
-// STATE — per-year isolation
-// Structure: { activeYear, years: { "2025": { fees, funding, expenses, players } } }
+// DEFAULT LOOKUPS — stored globally (not per year)
+// G.config = { cats: [{id,label,color,builtin}], formats: [{id,label,color,builtin}], sources: [{id,label,color,builtin}] }
 // ============================================================
 const CURRENT_YEAR = String(new Date().getFullYear());
-const DEFAULT_FEES = { both:250, t20:100, t40:150 };
+const DEFAULT_FEES = {both:250,t20:100,t40:150};
 
-function loadAll() {
-  try { const r = localStorage.getItem('cf_v2'); if(r) return JSON.parse(r); } catch(e){}
-  return { activeYear: CURRENT_YEAR, years: { [CURRENT_YEAR]: freshYear() } };
+const DEFAULT_CATS = [
+  {id:'food',    label:'Food',         color:'#f59e0b', builtin:true},
+  {id:'water',   label:'Water',        color:'#38bdf8', builtin:true},
+  {id:'electrolyte',label:'Electrolytes',color:'#34d399',builtin:true},
+  {id:'umpire',  label:'Umpiring',     color:'#a78bfa', builtin:true},
+  {id:'registration',label:'Registration',color:'#fb7185',builtin:true},
+  {id:'party',   label:'Party',        color:'#fbbf24', builtin:true},
+  {id:'other',   label:'Other',        color:'#9ca3af', builtin:true},
+];
+const DEFAULT_FORMATS = [
+  {id:'general', label:'General', color:'#9ca3af', builtin:true},
+  {id:'T20',     label:'T20',     color:'#60a5fa', builtin:true},
+  {id:'T40',     label:'T40',     color:'#a78bfa', builtin:true},
+];
+const DEFAULT_SOURCES = [
+  {id:'sponsor', label:'Sponsor', color:'#60a5fa', builtin:true},
+  {id:'player',  label:'Player',  color:'#22c55e', builtin:true},
+  {id:'other',   label:'Other',   color:'#9ca3af', builtin:true},
+];
+
+function loadAll(){
+  try{const r=localStorage.getItem('cf_v4');if(r)return JSON.parse(r);}catch(e){}
+  // migrate v3
+  try{
+    const v3=localStorage.getItem('cf_v3');
+    if(v3){
+      const old=JSON.parse(v3);
+      if(!old.config)old.config={cats:[...DEFAULT_CATS],formats:[...DEFAULT_FORMATS],sources:[...DEFAULT_SOURCES]};
+      Object.values(old.years||{}).forEach(y=>{if(!y.planned)y.planned=[];});
+      localStorage.setItem('cf_v4',JSON.stringify(old));
+      return old;
+    }
+  }catch(e){}
+  return{activeYear:CURRENT_YEAR,config:{cats:[...DEFAULT_CATS],formats:[...DEFAULT_FORMATS],sources:[...DEFAULT_SOURCES]},years:{[CURRENT_YEAR]:freshYear()}};
 }
 
-function freshYear(baseFees) {
-  return { fees: { ...(baseFees || DEFAULT_FEES) }, funding:[], expenses:[], players:[] };
+function freshYear(baseFees){
+  return{fees:{...(baseFees||DEFAULT_FEES)},funding:[],expenses:[],players:[],planned:[]};
 }
 
-let G = loadAll();
-function save() { localStorage.setItem('cf_v2', JSON.stringify(G)); }
-function yr() { if (!G.years[G.activeYear]) G.years[G.activeYear] = freshYear(); return G.years[G.activeYear]; }
-function fees() { return yr().fees || DEFAULT_FEES; }
+let G=loadAll();
+function save(){localStorage.setItem('cf_v4',JSON.stringify(G));}
+function yr(){if(!G.years[G.activeYear])G.years[G.activeYear]=freshYear();const y=G.years[G.activeYear];if(!y.planned)y.planned=[];return y;}
+function fees(){return yr().fees||DEFAULT_FEES;}
+function cfg(){if(!G.config)G.config={cats:[...DEFAULT_CATS],formats:[...DEFAULT_FORMATS],sources:[...DEFAULT_SOURCES]};return G.config;}
+
+// Lookup helpers
+function catById(id){return cfg().cats.find(c=>c.id===id)||{id,label:id,color:'#9ca3af'};}
+function fmtById(id){return cfg().formats.find(f=>f.id===id)||{id,label:id,color:'#9ca3af'};}
+function srcById(id){return cfg().sources.find(s=>s.id===id)||{id,label:id,color:'#60a5fa'};}
 
 // ============================================================
 // YEAR MGMT
 // ============================================================
-function buildYearSelect() {
-  const sel = document.getElementById('year-select');
-  const years = Object.keys(G.years).sort((a,b)=>b-a);
-  sel.innerHTML = years.map(y=>`<option value="${y}"${y===G.activeYear?' selected':''}>${y}</option>`).join('');
+function buildYearSelect(){
+  const sel=document.getElementById('year-select');
+  const years=Object.keys(G.years).sort((a,b)=>b-a);
+  sel.innerHTML=years.map(y=>`<option value="${y}"${y===G.activeYear?' selected':''}>${y}</option>`).join('');
 }
-
-function switchYear(y) {
-  G.activeYear = y; save();
-  buildYearSelect(); updateBadges(); rerenderActive();
-  toast(`Switched to ${y} season`);
+function switchYear(y){G.activeYear=y;save();buildYearSelect();updateBadges();rerenderActive();toast(`Switched to ${y} season`);}
+function promptNewYear(){
+  const raw=prompt('Enter season year (e.g. 2026):');if(!raw)return;
+  const y=raw.trim();if(!/^\d{4}$/.test(y)){toast('Enter a valid 4-digit year','error');return;}
+  if(G.years[y]){switchYear(y);return;}
+  G.years[y]=freshYear(fees());G.activeYear=y;save();
+  buildYearSelect();updateBadges();rerenderActive();toast(`${y} season created!`);
 }
-
-function promptNewYear() {
-  const raw = prompt('Enter season year (e.g. 2026):');
-  if (!raw) return;
-  const y = raw.trim();
-  if (!/^\d{4}$/.test(y)) { toast('Enter a valid 4-digit year','error'); return; }
-  if (G.years[y]) { switchYear(y); return; }
-  G.years[y] = freshYear(fees()); // copy current fees
-  G.activeYear = y; save();
-  buildYearSelect(); updateBadges(); rerenderActive();
-  toast(`${y} season created!`);
-}
-
-function deleteYear(y) {
-  if (Object.keys(G.years).length <= 1) { toast("Can't delete the only season",'error'); return; }
-  if (!confirm(`Delete the entire ${y} season and all its data? This cannot be undone.`)) return;
+function deleteYear(y){
+  if(Object.keys(G.years).length<=1){toast("Can't delete the only season",'error');return;}
+  if(!confirm(`Delete the entire ${y} season and all its data?`))return;
   delete G.years[y];
-  if (G.activeYear===y) G.activeYear = Object.keys(G.years).sort((a,b)=>b-a)[0];
-  save(); buildYearSelect(); updateBadges(); rerenderActive(); toast(`${y} deleted`);
+  if(G.activeYear===y)G.activeYear=Object.keys(G.years).sort((a,b)=>b-a)[0];
+  save();buildYearSelect();updateBadges();rerenderActive();toast(`${y} deleted`);
+}
+
+// ============================================================
+// CUSTOM CATEGORIES / FORMATS / SOURCES
+// ============================================================
+function slugify(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');}
+
+function addCustomCat(){
+  const name=document.getElementById('new-cat-name').value.trim();
+  const color=document.getElementById('new-cat-color').value;
+  if(!name){toast('Enter a category name','error');return;}
+  const id='cat_'+slugify(name)+'_'+Date.now().toString(36);
+  cfg().cats.push({id,label:name,color,builtin:false});
+  save();document.getElementById('new-cat-name').value='';
+  renderSettings();populateDropdowns();toast(`"${name}" category added`);
+}
+function deleteCustomCat(id){
+  const c=catById(id);if(c.builtin){toast('Cannot delete a built-in category','error');return;}
+  if(!confirm(`Delete category "${c.label}"?`))return;
+  cfg().cats=cfg().cats.filter(x=>x.id!==id);
+  save();renderSettings();populateDropdowns();toast('Category deleted');
+}
+
+function addCustomFormat(){
+  const name=document.getElementById('new-fmt-name').value.trim();
+  const color=document.getElementById('new-fmt-color').value;
+  if(!name){toast('Enter a format name','error');return;}
+  const id='fmt_'+slugify(name)+'_'+Date.now().toString(36);
+  cfg().formats.push({id,label:name,color,builtin:false});
+  save();document.getElementById('new-fmt-name').value='';
+  renderSettings();populateDropdowns();toast(`"${name}" format added`);
+}
+function deleteCustomFormat(id){
+  const f=fmtById(id);if(f.builtin){toast('Cannot delete a built-in format','error');return;}
+  if(!confirm(`Delete format "${f.label}"?`))return;
+  cfg().formats=cfg().formats.filter(x=>x.id!==id);
+  save();renderSettings();populateDropdowns();toast('Format deleted');
+}
+
+function addCustomSource(){
+  const name=document.getElementById('new-src-name').value.trim();
+  const color=document.getElementById('new-src-color').value;
+  if(!name){toast('Enter a source type name','error');return;}
+  const id='src_'+slugify(name)+'_'+Date.now().toString(36);
+  cfg().sources.push({id,label:name,color,builtin:false});
+  save();document.getElementById('new-src-name').value='';
+  renderSettings();populateDropdowns();toast(`"${name}" source type added`);
+}
+function deleteCustomSource(id){
+  const s=srcById(id);if(s.builtin){toast('Cannot delete a built-in source type','error');return;}
+  if(!confirm(`Delete source type "${s.label}"?`))return;
+  cfg().sources=cfg().sources.filter(x=>x.id!==id);
+  save();renderSettings();populateDropdowns();toast('Source type deleted');
+}
+
+// ============================================================
+// POPULATE DROPDOWNS (called whenever config changes)
+// ============================================================
+function populateDropdowns(){
+  // Expense category
+  const ec=document.getElementById('e-category');
+  if(ec){const v=ec.value;ec.innerHTML=cfg().cats.map(c=>`<option value="${c.id}">${c.label}</option>`).join('');if(v)ec.value=v;}
+
+  // Expense format
+  const ef=document.getElementById('e-format');
+  if(ef){const v=ef.value;ef.innerHTML=cfg().formats.map(f=>`<option value="${f.id}">${f.label}</option>`).join('');if(v)ef.value=v;}
+
+  // Funding source type
+  const ft=document.getElementById('f-type');
+  if(ft){const v=ft.value;ft.innerHTML=cfg().sources.map(s=>`<option value="${s.id}">${s.label}</option>`).join('');if(v)ft.value=v;togglePlayerField();}
+
+  // Planned type
+  const pt=document.getElementById('pl-type');
+  if(pt){const v=pt.value;pt.innerHTML=cfg().sources.map(s=>`<option value="${s.id}">${s.label}</option>`).join('');if(v)pt.value=v;}
 }
 
 // ============================================================
 // UTILS
 // ============================================================
-function $fmt(n){ return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-function $date(d){ if(!d) return '—'; return new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2); }
-function today(){ return new Date().toISOString().slice(0,10); }
+function $fmt(n){return'$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function $date(d){if(!d)return'—';return new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function today(){return new Date().toISOString().slice(0,10);}
+function isOverdue(item){return item.status==='pending'&&item.dueDate&&item.dueDate<today();}
 
-function tagHtml(cat){
-  const m={sponsor:['tag-sponsor','Sponsor'],player:['tag-player','Player'],other:['tag-other','Other'],
-    food:['tag-food','Food'],water:['tag-water','Water'],electrolyte:['tag-electrolyte','Electrolyte'],
-    umpire:['tag-umpire','Umpire'],registration:['tag-registration','Registration'],party:['tag-party','Party']};
-  const [c,l]=m[cat]||['tag-other',cat];
-  return `<span class="tag ${c}">${l}</span>`;
+function tagHtml(id){
+  const item=[...cfg().cats,...cfg().sources,...cfg().formats].find(x=>x.id===id)||{label:id,color:'#9ca3af'};
+  return`<span class="tag" style="background:${item.color}22;color:${item.color}">${item.label}</span>`;
 }
-function fmtPill(f){
-  if(!f||f==='general') return '<span style="color:var(--text-muted);font-size:.78rem">General</span>';
-  return `<span class="format-pill ${f==='T20'?'format-t20':f==='T40'?'format-t40':'format-both'}">${f}</span>`;
+function fmtPill(id){
+  if(!id||id==='general')return'<span style="color:var(--text-muted);font-size:.78rem">General</span>';
+  const f=fmtById(id);
+  return`<span class="format-pill" style="background:${f.color}22;color:${f.color}">${f.label}</span>`;
+}
+function statusBadge(item){
+  if(item.status==='received')return`<span class="status-received">✓ Received</span>`;
+  if(isOverdue(item))return`<span class="status-overdue">⚠ Overdue</span>`;
+  return`<span class="status-pending">⏳ Pending</span>`;
 }
 function toast(msg,type='success'){
   const t=document.getElementById('toast');
-  t.className=`toast ${type}`;
-  t.innerHTML=`<strong>${type==='success'?'✓':'✕'}</strong> ${msg}`;
-  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800);
+  t.className=`toast ${type}`;t.innerHTML=`<strong>${type==='success'?'✓':type==='error'?'✕':'ℹ'}</strong> ${msg}`;
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
 }
-
 function updateBadges(){
   const y=G.activeYear;
-  ['dash','funding','expenses','players','settings'].forEach(id=>{
-    const el=document.getElementById(id+'-year-badge'); if(el) el.textContent=y;
+  ['dash','planned','funding','expenses','players','settings'].forEach(id=>{
+    const el=document.getElementById(id+'-year-badge');if(el)el.textContent=y;
   });
-  const sfb=document.getElementById('save-fee-year'); if(sfb) sfb.textContent=y;
+  const sfb=document.getElementById('save-fee-year');if(sfb)sfb.textContent=y;
+  const pending=(yr().planned||[]).filter(p=>p.status==='pending').length;
+  const nb=document.getElementById('planned-nav-badge');
+  if(nb){nb.textContent=pending;nb.style.display=pending>0?'':'none';}
 }
 
 // ============================================================
 // PAGES
 // ============================================================
+let currentPlannedFilter='all';
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach(t=>{ if(t.getAttribute('onclick').includes(`'${id}'`)) t.classList.add('active'); });
+  document.querySelectorAll('.nav-tab').forEach(t=>{if(t.getAttribute('onclick').includes(`'${id}'`))t.classList.add('active');});
   render(id);
 }
-
 function render(id){
-  if(id==='dashboard') renderDashboard();
-  if(id==='funding') renderFunding();
-  if(id==='expenses') renderExpenses();
-  if(id==='players') renderPlayers();
-  if(id==='settings') renderSettings();
+  if(id==='dashboard')renderDashboard();
+  if(id==='planned')renderPlanned();
+  if(id==='funding')renderFunding();
+  if(id==='expenses')renderExpenses();
+  if(id==='players')renderPlayers();
+  if(id==='settings')renderSettings();
 }
-
-function rerenderActive(){
-  const el=document.querySelector('.page.active'); if(!el) return;
-  render(el.id.replace('page-',''));
+function rerenderActive(){const el=document.querySelector('.page.active');if(!el)return;render(el.id.replace('page-',''));}
+function setPlannedFilter(f,btn){
+  currentPlannedFilter=f;
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderPlanned();
 }
 
 // ============================================================
 // MODALS
 // ============================================================
+let markPaidTargetId=null;
 function openModal(id){
+  populateDropdowns();
   document.getElementById(id).classList.add('active');
-  document.querySelectorAll(`#${id} input[type=date]`).forEach(f=>{ if(!f.value) f.value=today(); });
-  if(id==='modal-funding') fillPlayerDropdown();
-  if(id==='modal-player') updateFeePreview();
+  document.querySelectorAll(`#${id} input[type=date]`).forEach(f=>{if(!f.value)f.value=today();});
+  if(id==='modal-funding')fillPlayerDropdown();
+  if(id==='modal-player')updateFeePreview();
 }
 function closeModal(id){
   document.getElementById(id).classList.remove('active');
@@ -485,11 +736,26 @@ function closeModal(id){
   el.querySelectorAll('textarea').forEach(i=>i.value='');
   el.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
   togglePlayerField();
+  if(id==='modal-mark-paid')markPaidTargetId=null;
 }
-document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) closeModal(m.id); }));
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id);}));
 
+function openMarkPaid(id){
+  const item=yr().planned.find(p=>p.id===id);if(!item)return;
+  markPaidTargetId=id;
+  document.getElementById('mpr-info').innerHTML=`
+    <div class="mpi-label">From</div><div class="mpi-val">${item.name} ${tagHtml(item.type)}</div>
+    <div style="margin-top:.6rem"><div class="mpi-label">Expected Amount</div><div class="mpi-amount">${$fmt(item.amount)}</div></div>
+    ${item.dueDate?`<div style="margin-top:.4rem"><div class="mpi-label">Expected Date</div><div class="mpi-val">${$date(item.dueDate)}</div></div>`:''}
+    ${item.notes?`<div style="margin-top:.4rem"><div class="mpi-label">Notes</div><div class="mpi-val" style="color:var(--text-dim)">${item.notes}</div></div>`:''}`;
+  document.getElementById('mpr-amount').value=item.amount;
+  document.getElementById('mpr-date').value=today();
+  document.getElementById('mpr-notes').value='';
+  document.getElementById('modal-mark-paid').classList.add('active');
+}
 function togglePlayerField(){
-  const t=document.getElementById('f-type'); if(!t) return;
+  const t=document.getElementById('f-type');if(!t)return;
+  // "player" source type id check — built-in id is 'player'
   document.getElementById('f-player-field').style.display=t.value==='player'?'':'none';
 }
 function fillPlayerDropdown(){
@@ -498,19 +764,52 @@ function fillPlayerDropdown(){
   const f=fees();
   yr().players.forEach(p=>{
     const due=(f[p.format]||0)-(p.paid||0);
-    const o=document.createElement('option'); o.value=p.id;
-    o.textContent=`${p.name} (owes ${$fmt(due)})`; sel.appendChild(o);
+    const o=document.createElement('option');o.value=p.id;
+    o.textContent=`${p.name} (owes ${$fmt(due)})`;sel.appendChild(o);
   });
 }
 function updateFeePreview(){
-  const fmt=document.getElementById('p-format'); if(!fmt) return;
-  const el=document.getElementById('fee-preview'); if(!el) return;
+  const fmt=document.getElementById('p-format');if(!fmt)return;
+  const el=document.getElementById('fee-preview');if(!el)return;
   el.textContent=$fmt(fees()[fmt.value]||0);
 }
 
 // ============================================================
 // CRUD
 // ============================================================
+function addPlanned(){
+  const type=document.getElementById('pl-type').value;
+  const amount=parseFloat(document.getElementById('pl-amount').value);
+  const name=document.getElementById('pl-name').value.trim();
+  const dueDate=document.getElementById('pl-due-date').value;
+  const notes=document.getElementById('pl-notes').value.trim();
+  if(!amount||amount<=0){toast('Enter a valid amount','error');return;}
+  if(!name){toast('Enter a name','error');return;}
+  yr().planned.push({id:uid(),type,amount,name,dueDate,notes,status:'pending',receivedDate:null,receivedAmount:null,fundingId:null});
+  save();closeModal('modal-planned');
+  toast('Planned payment added');renderPlanned();renderDashboard();updateBadges();
+}
+function confirmMarkPaid(){
+  if(!markPaidTargetId)return;
+  const item=yr().planned.find(p=>p.id===markPaidTargetId);if(!item)return;
+  const amount=parseFloat(document.getElementById('mpr-amount').value);
+  const date=document.getElementById('mpr-date').value;
+  const notes=document.getElementById('mpr-notes').value.trim();
+  if(!amount||amount<=0){toast('Enter actual amount received','error');return;}
+  item.status='received';item.receivedDate=date;item.receivedAmount=amount;
+  const fid=uid();item.fundingId=fid;
+  yr().funding.push({id:fid,type:item.type,amount,name:item.name,date,notes:(notes?notes+' ':'')+'[From planned payment]',fromPlannedId:markPaidTargetId});
+  save();closeModal('modal-mark-paid');
+  toast(`Payment received! Added ${$fmt(amount)} to Funding.`);
+  renderPlanned();renderFunding();renderDashboard();updateBadges();
+}
+function deletePlanned(id){
+  const item=yr().planned.find(p=>p.id===id);if(!item)return;
+  if(item.status==='received'&&!confirm('This was already received. Delete the planned record?\n(Funding record stays.)'))return;
+  if(item.status!=='received'&&!confirm('Delete this planned payment?'))return;
+  yr().planned=yr().planned.filter(p=>p.id!==id);
+  save();renderPlanned();renderDashboard();updateBadges();toast('Deleted');
+}
 function addFunding(){
   const type=document.getElementById('f-type').value;
   const amount=parseFloat(document.getElementById('f-amount').value);
@@ -525,10 +824,9 @@ function addFunding(){
     const p=yr().players.find(x=>x.id===playerLink);
     if(p){p.paid=(p.paid||0)+amount;rec.playerId=playerLink;rec.name=p.name;}
   }
-  yr().funding.push(rec); save(); closeModal('modal-funding');
-  toast('Funding added'); renderFunding(); renderDashboard();
+  yr().funding.push(rec);save();closeModal('modal-funding');
+  toast('Funding added');renderFunding();renderDashboard();
 }
-
 function addExpense(){
   const category=document.getElementById('e-category').value;
   const amount=parseFloat(document.getElementById('e-amount').value);
@@ -539,10 +837,9 @@ function addExpense(){
   if(!amount||amount<=0){toast('Enter a valid amount','error');return;}
   if(!desc){toast('Enter a description','error');return;}
   yr().expenses.push({id:uid(),category,amount,desc,format,date,notes});
-  save(); closeModal('modal-expense');
-  toast('Expense recorded'); renderExpenses(); renderDashboard();
+  save();closeModal('modal-expense');
+  toast('Expense recorded');renderExpenses();renderDashboard();
 }
-
 function addPlayer(){
   const name=document.getElementById('p-name').value.trim();
   const format=document.getElementById('p-format').value;
@@ -550,52 +847,164 @@ function addPlayer(){
   const notes=document.getElementById('p-notes').value.trim();
   if(!name){toast('Enter player name','error');return;}
   yr().players.push({id:uid(),name,format,paid,notes});
-  save(); closeModal('modal-player');
-  toast(`${name} added`); renderPlayers(); renderDashboard();
+  save();closeModal('modal-player');
+  toast(`${name} added`);renderPlayers();renderDashboard();
 }
-
 function deleteFunding(id){
   if(!confirm('Delete this funding record?'))return;
   yr().funding=yr().funding.filter(f=>f.id!==id);
-  save(); renderFunding(); renderDashboard(); toast('Deleted');
+  save();renderFunding();renderDashboard();toast('Deleted');
 }
 function deleteExpense(id){
   if(!confirm('Delete this expense?'))return;
   yr().expenses=yr().expenses.filter(e=>e.id!==id);
-  save(); renderExpenses(); renderDashboard(); toast('Deleted');
+  save();renderExpenses();renderDashboard();toast('Deleted');
 }
 function deletePlayer(id){
   if(!confirm('Remove this player?'))return;
   yr().players=yr().players.filter(p=>p.id!==id);
-  save(); renderPlayers(); renderDashboard(); toast('Player removed');
+  save();renderPlayers();renderDashboard();toast('Player removed');
 }
-
 function saveFees(){
   const both=parseFloat(document.getElementById('fee-both').value);
   const t20=parseFloat(document.getElementById('fee-t20').value);
   const t40=parseFloat(document.getElementById('fee-t40').value);
-  if([both,t20,t40].some(v=>isNaN(v)||v<0)){toast('Enter valid amounts for all tiers','error');return;}
-  yr().fees={both,t20,t40}; save();
-  toast(`Fee tiers saved for ${G.activeYear}`);
-  renderPlayers(); renderDashboard(); renderSettings();
+  if([both,t20,t40].some(v=>isNaN(v)||v<0)){toast('Enter valid amounts','error');return;}
+  yr().fees={both,t20,t40};save();
+  toast(`Fee tiers saved for ${G.activeYear}`);renderPlayers();renderDashboard();renderSettings();
 }
 
 // ============================================================
-// RENDER
+// RENDER SETTINGS (with custom lists)
+// ============================================================
+function renderSettings(){
+  updateBadges();
+  const f=fees();
+  document.getElementById('fee-both').value=f.both;
+  document.getElementById('fee-t20').value=f.t20;
+  document.getElementById('fee-t40').value=f.t40;
+  const sfb=document.getElementById('save-fee-year');if(sfb)sfb.textContent=G.activeYear;
+
+  // Expense category list
+  document.getElementById('cat-list').innerHTML=cfg().cats.map(c=>`
+    <div class="custom-item">
+      <div class="custom-item-name">
+        <div class="custom-item-dot" style="background:${c.color}"></div>
+        ${c.label}
+        ${c.builtin?'<span class="custom-item-builtin">built-in</span>':''}
+      </div>
+      <div class="custom-item-actions">
+        ${!c.builtin?`<button class="btn-icon" onclick="deleteCustomCat('${c.id}')" title="Delete">🗑</button>`:'<span style="width:28px"></span>'}
+      </div>
+    </div>`).join('');
+
+  // Format list
+  document.getElementById('format-list').innerHTML=cfg().formats.map(f=>`
+    <div class="custom-item">
+      <div class="custom-item-name">
+        <div class="custom-item-dot" style="background:${f.color}"></div>
+        ${f.label}
+        ${f.builtin?'<span class="custom-item-builtin">built-in</span>':''}
+      </div>
+      <div class="custom-item-actions">
+        ${!f.builtin?`<button class="btn-icon" onclick="deleteCustomFormat('${f.id}')" title="Delete">🗑</button>`:'<span style="width:28px"></span>'}
+      </div>
+    </div>`).join('');
+
+  // Source type list
+  document.getElementById('source-list').innerHTML=cfg().sources.map(s=>`
+    <div class="custom-item">
+      <div class="custom-item-name">
+        <div class="custom-item-dot" style="background:${s.color}"></div>
+        ${s.label}
+        ${s.builtin?'<span class="custom-item-builtin">built-in</span>':''}
+      </div>
+      <div class="custom-item-actions">
+        ${!s.builtin?`<button class="btn-icon" onclick="deleteCustomSource('${s.id}')" title="Delete">🗑</button>`:'<span style="width:28px"></span>'}
+      </div>
+    </div>`).join('');
+
+  // Season list
+  const years=Object.keys(G.years).sort((a,b)=>b-a);
+  document.getElementById('year-list').innerHTML=years.map(y=>{
+    const d=G.years[y];
+    const col=(d.funding||[]).reduce((s,x)=>s+x.amount,0);
+    const sp=(d.expenses||[]).reduce((s,x)=>s+x.amount,0);
+    const pl=(d.players||[]).length;
+    const active=y===G.activeYear;
+    return`<div class="year-list-row${active?' active-year':''}">
+      <div><div class="year-list-name">${y}${active?' ← current':''}</div><div class="year-list-stats">${pl} players · ${$fmt(col)} collected · ${$fmt(sp)} spent</div></div>
+      <div class="year-list-actions">
+        ${!active?`<button class="btn btn-ghost btn-sm" onclick="switchYear('${y}')">Switch</button>`:''}
+        ${years.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteYear('${y}')">Delete</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// RENDER PLANNED
+// ============================================================
+function renderPlanned(){
+  updateBadges();
+  const s=yr();const all=s.planned||[];const todayStr=today();
+  const pending=all.filter(p=>p.status==='pending'&&(!p.dueDate||p.dueDate>=todayStr));
+  const overdue=all.filter(p=>isOverdue(p));
+  const received=all.filter(p=>p.status==='received');
+  document.getElementById('pl-stat-pending').textContent=$fmt(pending.reduce((a,x)=>a+x.amount,0));
+  document.getElementById('pl-stat-received').textContent=$fmt(received.reduce((a,x)=>a+(x.receivedAmount||x.amount),0));
+  document.getElementById('pl-stat-overdue').textContent=$fmt(overdue.reduce((a,x)=>a+x.amount,0));
+  document.getElementById('ftc-all').textContent=all.length;
+  document.getElementById('ftc-pending').textContent=[...pending,...overdue].length;
+  document.getElementById('ftc-overdue').textContent=overdue.length;
+  document.getElementById('ftc-received').textContent=received.length;
+  let filtered=all;
+  if(currentPlannedFilter==='pending')filtered=[...pending,...overdue];
+  if(currentPlannedFilter==='overdue')filtered=overdue;
+  if(currentPlannedFilter==='received')filtered=received;
+  filtered=[...filtered].sort((a,b)=>{
+    const ao=isOverdue(a)?0:1,bo=isOverdue(b)?0:1;
+    if(ao!==bo)return ao-bo;
+    return(a.dueDate||'9999')>(b.dueDate||'9999')?1:-1;
+  });
+  const wrap=document.getElementById('planned-table-wrap');
+  if(!filtered.length){wrap.innerHTML=`<div class="empty-state"><div class="icon">📅</div>${all.length?'No payments match this filter':'No planned payments yet'}</div>`;return;}
+  wrap.innerHTML=`<table class="data-table"><thead><tr><th>From</th><th>Type</th><th>Expected Date</th><th>Expected</th><th>Status</th><th>Received</th><th>Actions</th></tr></thead><tbody>${filtered.map(item=>{
+    const od=isOverdue(item);
+    const rc=item.status==='received'?`<span class="amount-green">${$fmt(item.receivedAmount||item.amount)}</span><br><span style="font-size:.75rem;color:var(--text-muted)">${$date(item.receivedDate)}</span>`:'—';
+    const acts=item.status==='pending'||od
+      ?`<button class="btn-mark-paid" onclick="openMarkPaid('${item.id}')">✓ Mark Received</button><button class="del-btn" onclick="deletePlanned('${item.id}')" style="margin-left:.3rem">🗑</button>`
+      :`<button class="del-btn" onclick="deletePlanned('${item.id}')">🗑</button>`;
+    return`<tr class="${item.status==='received'?'row-received':od?'row-overdue':''}">
+      <td><strong>${item.name}</strong>${item.notes?`<div style="font-size:.75rem;color:var(--text-muted);margin-top:.1rem">${item.notes}</div>`:''}</td>
+      <td>${tagHtml(item.type)}</td>
+      <td style="color:${od?'var(--red)':'var(--text-dim)'};font-size:.85rem;white-space:nowrap">${$date(item.dueDate)}</td>
+      <td class="amount-purple">${$fmt(item.amount)}</td>
+      <td>${statusBadge(item)}</td><td>${rc}</td>
+      <td style="white-space:nowrap">${acts}</td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+// ============================================================
+// RENDER DASHBOARD
 // ============================================================
 function renderDashboard(){
   updateBadges();
-  const s=yr(); const f=fees();
+  const s=yr();const f=fees();
   const collected=s.funding.reduce((a,x)=>a+x.amount,0);
   const spent=s.expenses.reduce((a,x)=>a+x.amount,0);
   const balance=collected-spent;
   const due=s.players.reduce((a,p)=>a+(f[p.format]||0),0);
   const paid=s.players.reduce((a,p)=>a+(p.paid||0),0);
+  const plannedPendingItems=(s.planned||[]).filter(p=>p.status==='pending');
+  const plannedPending=plannedPendingItems.reduce((a,x)=>a+x.amount,0);
 
   document.getElementById('stat-collected').textContent=$fmt(collected);
   document.getElementById('stat-spent').textContent=$fmt(spent);
   document.getElementById('stat-balance').textContent=$fmt(balance);
   document.getElementById('stat-pending').textContent=$fmt(Math.max(0,due-paid));
+  document.getElementById('stat-planned').textContent=$fmt(plannedPending);
 
   const pct=collected>0?Math.min(100,spent/collected*100):0;
   document.getElementById('balance-bar').style.width=pct+'%';
@@ -603,45 +1012,53 @@ function renderDashboard(){
   document.getElementById('bal-left').textContent=$fmt(spent)+' spent';
   document.getElementById('bal-right').textContent=$fmt(collected)+' total';
 
-  // Expense cats
-  const cats={};
-  s.expenses.forEach(e=>{cats[e.category]=(cats[e.category]||0)+e.amount;});
+  // Expense breakdown using dynamic cats
+  const cats={};s.expenses.forEach(e=>{cats[e.category]=(cats[e.category]||0)+e.amount;});
   const maxC=Math.max(...Object.values(cats),1);
-  const CC={food:'#f59e0b',water:'#38bdf8',electrolyte:'#34d399',umpire:'#a78bfa',registration:'#fb7185',party:'#fbbf24',other:'#9ca3af'};
-  const CL={food:'Food',water:'Water',electrolyte:'Electrolytes',umpire:'Umpiring',registration:'Registration',party:'Party',other:'Other'};
-  document.getElementById('cat-breakdown').innerHTML=Object.keys(cats).length===0
+  document.getElementById('cat-breakdown').innerHTML=!Object.keys(cats).length
     ?'<div class="empty-state"><div class="icon">📊</div>No expenses yet</div>'
-    :Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="cat-row"><div class="cat-label">${CL[k]||k}</div><div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${v/maxC*100}%;background:${CC[k]||'#9ca3af'}"></div></div><div class="cat-amount">${$fmt(v)}</div></div>`).join('');
+    :Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>{
+        const c=catById(k);
+        return`<div class="cat-row"><div class="cat-label">${c.label}</div><div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${v/maxC*100}%;background:${c.color}"></div></div><div class="cat-amount">${$fmt(v)}</div></div>`;
+      }).join('');
 
-  // Funding src
-  const fs={sponsor:0,player:0,other:0};
-  s.funding.forEach(x=>{fs[x.type]=(fs[x.type]||0)+x.amount;});
+  // Funding breakdown using dynamic sources
+  const fs={};s.funding.forEach(x=>{fs[x.type]=(fs[x.type]||0)+x.amount;});
   const maxF=Math.max(...Object.values(fs),1);
-  const FC={sponsor:'#60a5fa',player:'#22c55e',other:'#9ca3af'};
-  const FL={sponsor:'Sponsors',player:'Players',other:'Other'};
   document.getElementById('funding-breakdown').innerHTML=collected===0
     ?'<div class="empty-state"><div class="icon">💰</div>No funding yet</div>'
-    :Object.entries(fs).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="cat-row"><div class="cat-label">${FL[k]}</div><div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${v/maxF*100}%;background:${FC[k]}"></div></div><div class="cat-amount">${$fmt(v)}</div></div>`).join('');
+    :Object.entries(fs).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).map(([k,v])=>{
+        const src=srcById(k);
+        return`<div class="cat-row"><div class="cat-label">${src.label}</div><div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${v/maxF*100}%;background:${src.color}"></div></div><div class="cat-amount">${$fmt(v)}</div></div>`;
+      }).join('');
 
-  // Recent
+  // Upcoming planned
+  const upcoming=plannedPendingItems.sort((a,b)=>(a.dueDate||'9999')>(b.dueDate||'9999')?1:-1).slice(0,5);
+  document.getElementById('dash-planned-count').textContent=`${plannedPendingItems.length} pending`;
+  document.getElementById('dash-planned-list').innerHTML=!upcoming.length
+    ?'<div class="empty-state"><div class="icon">📅</div>No pending planned payments</div>'
+    :`<table class="data-table"><thead><tr><th>From</th><th>Type</th><th>Expected Date</th><th>Amount</th><th></th></tr></thead><tbody>${upcoming.map(item=>{
+        const od=isOverdue(item);
+        return`<tr class="${od?'row-overdue':''}"><td><strong>${item.name}</strong></td><td>${tagHtml(item.type)}</td><td style="color:${od?'var(--red)':'var(--text-dim)'};font-size:.85rem">${$date(item.dueDate)}${od?' ⚠':''}</td><td class="amount-purple">${$fmt(item.amount)}</td><td><button class="btn-mark-paid" onclick="openMarkPaid('${item.id}')">✓ Mark Received</button></td></tr>`;
+      }).join('')}</tbody></table>`;
+
+  // Recent activity
   const act=[...s.funding.map(x=>({...x,_t:'funding',_ts:new Date(x.date||0).getTime()})),...s.expenses.map(x=>({...x,_t:'expense',_ts:new Date(x.date||0).getTime()}))].sort((a,b)=>b._ts-a._ts).slice(0,8);
-  document.getElementById('recent-activity').innerHTML=act.length===0
+  document.getElementById('recent-activity').innerHTML=!act.length
     ?'<div class="empty-state"><div class="icon">📋</div>No activity yet</div>'
-    :`<table class="data-table"><thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Amount</th></tr></thead><tbody>${act.map(a=>`<tr><td style="color:var(--text-dim);font-size:.82rem">${$date(a.date)}</td><td>${a._t==='funding'?a.name:a.desc}</td><td>${a._t==='funding'?tagHtml(a.type):tagHtml(a.category)}</td><td class="${a._t==='funding'?'amount-green':'amount-red'}">${a._t==='funding'?'+':'-'}${$fmt(a.amount)}</td></tr>`).join('')}</tbody></table>`;
+    :`<table class="data-table"><thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Amount</th></tr></thead><tbody>${act.map(a=>`<tr><td style="color:var(--text-dim);font-size:.82rem">${$date(a.date)}</td><td>${a._t==='funding'?a.name:a.desc}</td><td>${tagHtml(a._t==='funding'?a.type:a.category)}</td><td class="${a._t==='funding'?'amount-green':'amount-red'}">${a._t==='funding'?'+':'-'}${$fmt(a.amount)}</td></tr>`).join('')}</tbody></table>`;
 }
 
 function renderFunding(){
-  updateBadges();
-  const s=yr();
+  updateBadges();const s=yr();
   document.getElementById('funding-total-badge').textContent=$fmt(s.funding.reduce((a,f)=>a+f.amount,0));
   const wrap=document.getElementById('funding-table-wrap');
   if(!s.funding.length){wrap.innerHTML='<div class="empty-state"><div class="icon">💸</div>No funding added yet</div>';return;}
-  wrap.innerHTML=`<table class="data-table"><thead><tr><th>Date</th><th>Name</th><th>Type</th><th>Notes</th><th>Amount</th><th></th></tr></thead><tbody>${[...s.funding].sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).map(f=>`<tr><td style="color:var(--text-dim);font-size:.82rem;white-space:nowrap">${$date(f.date)}</td><td><strong>${f.name}</strong></td><td>${tagHtml(f.type)}</td><td style="color:var(--text-dim);font-size:.82rem">${f.notes||'—'}</td><td class="amount-green">+${$fmt(f.amount)}</td><td><button class="del-btn" onclick="deleteFunding('${f.id}')">🗑</button></td></tr>`).join('')}</tbody></table>`;
+  wrap.innerHTML=`<table class="data-table"><thead><tr><th>Date</th><th>Name</th><th>Source Type</th><th>Notes</th><th>Amount</th><th></th></tr></thead><tbody>${[...s.funding].sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).map(f=>`<tr><td style="color:var(--text-dim);font-size:.82rem;white-space:nowrap">${$date(f.date)}</td><td><strong>${f.name}</strong>${f.fromPlannedId?'<span style="font-size:.7rem;color:var(--purple);margin-left:.4rem">📅 plan</span>':''}</td><td>${tagHtml(f.type)}</td><td style="color:var(--text-dim);font-size:.82rem">${f.notes||'—'}</td><td class="amount-green">+${$fmt(f.amount)}</td><td><button class="del-btn" onclick="deleteFunding('${f.id}')">🗑</button></td></tr>`).join('')}</tbody></table>`;
 }
 
 function renderExpenses(){
-  updateBadges();
-  const s=yr();
+  updateBadges();const s=yr();
   document.getElementById('expense-total-badge').textContent=$fmt(s.expenses.reduce((a,e)=>a+e.amount,0));
   const wrap=document.getElementById('expense-table-wrap');
   if(!s.expenses.length){wrap.innerHTML='<div class="empty-state"><div class="icon">🧾</div>No expenses added yet</div>';return;}
@@ -649,8 +1066,7 @@ function renderExpenses(){
 }
 
 function renderPlayers(){
-  updateBadges();
-  const s=yr(); const f=fees();
+  updateBadges();const s=yr();const f=fees();
   const FL_LABEL={both:'T20 + T40',t20:'T20 Only',t40:'T40 Only'};
   const FC={both:'format-both',t20:'format-t20',t40:'format-t40'};
   document.getElementById('fee-tier-cards').innerHTML=`
@@ -664,39 +1080,17 @@ function renderPlayers(){
     const st=due<=0?'paid':paid>0?'partial':'unpaid';
     const lbl=due<=0?'Paid ✓':`Owes ${$fmt(due)}`;
     const ini=p.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    return `<div class="player-card"><div class="player-avatar">${ini}</div><div class="player-info"><div class="player-name">${p.name}</div><div class="player-meta"><span class="format-pill ${FC[p.format]}">${FL_LABEL[p.format]}</span>${p.notes?`<span style="margin-left:.3rem;color:var(--text-muted);font-size:.75rem">${p.notes}</span>`:''}</div></div><div class="player-amount"><div class="player-due ${st}">${lbl}</div><div class="player-due-label">${$fmt(paid)} / ${$fmt(fee)}</div><button class="del-btn btn-sm" onclick="deletePlayer('${p.id}')" style="margin-top:.3rem">🗑</button></div></div>`;
+    return`<div class="player-card"><div class="player-avatar">${ini}</div><div class="player-info"><div class="player-name">${p.name}</div><div class="player-meta"><span class="format-pill ${FC[p.format]}">${FL_LABEL[p.format]}</span>${p.notes?`<span style="margin-left:.3rem;color:var(--text-muted);font-size:.75rem">${p.notes}</span>`:''}</div></div><div class="player-amount"><div class="player-due ${st}">${lbl}</div><div class="player-due-label">${$fmt(paid)} / ${$fmt(fee)}</div><button class="del-btn btn-sm" onclick="deletePlayer('${p.id}')" style="margin-top:.3rem">🗑</button></div></div>`;
   }).join('')}</div>`;
-}
-
-function renderSettings(){
-  updateBadges();
-  const f=fees();
-  document.getElementById('fee-both').value=f.both;
-  document.getElementById('fee-t20').value=f.t20;
-  document.getElementById('fee-t40').value=f.t40;
-  const sfb=document.getElementById('save-fee-year'); if(sfb) sfb.textContent=G.activeYear;
-
-  const years=Object.keys(G.years).sort((a,b)=>b-a);
-  document.getElementById('year-list').innerHTML=years.map(y=>{
-    const d=G.years[y];
-    const col=(d.funding||[]).reduce((s,x)=>s+x.amount,0);
-    const sp=(d.expenses||[]).reduce((s,x)=>s+x.amount,0);
-    const pl=(d.players||[]).length;
-    const active=y===G.activeYear;
-    return `<div class="year-list-row${active?' active-year':''}">
-      <div><div class="year-list-name">${y}${active?' ← current':''}</div><div class="year-list-stats">${pl} players · ${$fmt(col)} collected · ${$fmt(sp)} spent</div></div>
-      <div class="year-list-actions">
-        ${!active?`<button class="btn btn-ghost btn-sm" onclick="switchYear('${y}')">Switch</button>`:''}
-        ${years.length>1?`<button class="btn btn-danger btn-sm" onclick="deleteYear('${y}')">Delete</button>`:''}
-      </div>
-    </div>`;
-  }).join('');
 }
 
 // ============================================================
 // INIT
 // ============================================================
-buildYearSelect(); updateBadges(); renderDashboard();
+populateDropdowns();
+buildYearSelect();
+updateBadges();
+renderDashboard();
 </script>
 </body>
 </html>
