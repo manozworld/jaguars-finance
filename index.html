@@ -609,27 +609,29 @@ function updateAuthUI(){
 // ── Load / Save Firestore ─────────────────────────────────────
 async function loadData(){
   try{
-    // Load config
+    // Load config (public read)
     const cfgSnap = await getDoc(configRef);
     if(cfgSnap.exists()){
       DATA.config = cfgSnap.data();
-    } else {
-      // First run — write defaults
+    } else if(isAdmin){
+      // First ever run — only write defaults if admin
       await setDoc(configRef, DATA.config);
     }
 
-    // Load all seasons
-    const years = DATA.config.years || [CURRENT_YEAR];
-    const yearKeys = Array.isArray(years) ? years : Object.keys(DATA.years||{});
-
-    // Load active year + any existing seasons from Firestore
+    // Load all seasons (public read)
     const seasonsSnap = await getDocs(collection(db,'seasons'));
     DATA.years = {};
     seasonsSnap.forEach(d => { DATA.years[d.id] = d.data(); });
 
     if(!Object.keys(DATA.years).length){
-      DATA.years[CURRENT_YEAR] = freshYear();
-      await setDoc(yearsRef(CURRENT_YEAR), DATA.years[CURRENT_YEAR]);
+      if(isAdmin){
+        // First ever run — only write if admin
+        DATA.years[CURRENT_YEAR] = freshYear();
+        await setDoc(yearsRef(CURRENT_YEAR), DATA.years[CURRENT_YEAR]);
+      } else {
+        // Guest viewing empty app — use local defaults
+        DATA.years[CURRENT_YEAR] = freshYear();
+      }
     }
 
     // Ensure arrays exist
@@ -641,12 +643,14 @@ async function loadData(){
       if(!y.fees)y.fees={...DEFAULT_FEES};
     });
 
-    // Set active year
+    // Set active year to most recent if current doesn't exist
     if(!DATA.years[activeYear]) activeYear = Object.keys(DATA.years).sort((a,b)=>b-a)[0];
 
   } catch(e){
     console.error('Firestore load error:',e);
-    toast('Error loading data','error');
+    // Only show error to admin — guests just see empty app
+    if(isAdmin) toast('Error loading data — check connection','error');
+    if(!Object.keys(DATA.years).length) DATA.years[CURRENT_YEAR] = freshYear();
   }
 }
 
