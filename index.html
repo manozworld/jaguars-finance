@@ -511,10 +511,8 @@ const db  = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// ── Admin emails — add your email here ──────────────────────
-const ADMIN_EMAILS = [
-  "manoj.thippareddy@gmail.com"
-];
+// ── Admin check ref (no emails in code — checked via Firestore) ──
+const adminRef = (uid) => doc(db, 'admins', uid);
 
 // ── Defaults ─────────────────────────────────────────────────
 const CURRENT_YEAR = String(new Date().getFullYear());
@@ -568,7 +566,17 @@ window.signOut = async () => {
 
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
-  isAdmin = user ? (ADMIN_EMAILS.length === 0 || ADMIN_EMAILS.includes(user.email)) : false;
+  if(user){
+    // Check Firestore admins collection — nothing sensitive in the HTML
+    try{
+      const snap = await getDoc(adminRef(user.uid));
+      isAdmin = snap.exists();
+    } catch(e){
+      isAdmin = false;
+    }
+  } else {
+    isAdmin = false;
+  }
   updateAuthUI();
   await loadData();
   hideLoading();
