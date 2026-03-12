@@ -230,7 +230,7 @@
 </div>
 
 <nav>
-  <div class="nav-brand">JAGUARS FUND MANAGEMENT</div>
+  <div class="nav-brand">JAGUARS FUND MANAGEMENT</span></div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('dashboard')">Dashboard</button>
     <button class="nav-tab" onclick="showPage('planned')">Planned <span class="nav-badge" id="planned-nav-badge" style="display:none">0</span></button>
@@ -482,8 +482,21 @@
     <div class="form-grid">
       <div class="form-group"><label>Player Name</label><input type="text" id="p-name" placeholder="Full name"></div>
       <div class="form-group"><label>Format</label><select id="p-format" onchange="updateFeePreview()"><option value="both">T20 + T40</option><option value="t20">T20 Only</option><option value="t40">T40 Only</option></select></div>
-      <div class="form-group"><label>Fee Due (this season)</label><div class="fee-preview-box" id="fee-preview">$250</div></div>
-      <div class="form-group"><label>Amount Already Paid ($)</label><input type="number" id="p-paid" placeholder="0.00" min="0" step="0.01" value="0"></div>
+      <div class="form-group"><label>Season Fee</label><div class="fee-preview-box" id="fee-preview">$250</div></div>
+      <div class="form-group">
+        <label>Payment Status</label>
+        <select id="p-payment-status" onchange="updatePlayerPaymentFields()">
+          <option value="unpaid">Unpaid — will add to Planned Payments</option>
+          <option value="partial">Partial — split between Paid &amp; Planned</option>
+          <option value="paid">Fully Paid — will add to Funding</option>
+        </select>
+      </div>
+      <div id="p-paid-group" style="display:none">
+        <div class="form-group"><label>Amount Paid ($)</label><input type="number" id="p-paid" placeholder="0.00" min="0" step="0.01" value="0"></div>
+      </div>
+      <div id="p-due-date-group" style="display:none">
+        <div class="form-group"><label>Expected Payment Date</label><input type="date" id="p-due-date"></div>
+      </div>
       <div class="form-group"><label>Contact / Notes</label><input type="text" id="p-notes" placeholder="Phone or notes"></div>
     </div>
     <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-player')">Cancel</button><button class="btn btn-primary" onclick="addPlayer()">Add Player</button></div>
@@ -814,7 +827,7 @@ window.openModal = (id) => {
   document.getElementById(id).classList.add('active');
   document.querySelectorAll(`#${id} input[type=date]`).forEach(f=>{if(!f.value)f.value=today();});
   if(id==='modal-funding')fillPlayerDropdown();
-  if(id==='modal-player')updateFeePreview();
+  if(id==='modal-player'){updateFeePreview();updatePlayerPaymentFields();}
 };
 window.closeModal = (id) => {
   document.getElementById(id).classList.remove('active');
@@ -857,6 +870,23 @@ function fillPlayerDropdown(){
 window.updateFeePreview = () => {
   const fmt=document.getElementById('p-format');if(!fmt)return;
   document.getElementById('fee-preview').textContent=$fmt(fees()[fmt.value]||0);
+  updatePlayerPaymentFields();
+};
+
+window.updatePlayerPaymentFields = () => {
+  const status=document.getElementById('p-payment-status')?.value;
+  const paidGroup=document.getElementById('p-paid-group');
+  const dueDateGroup=document.getElementById('p-due-date-group');
+  if(!paidGroup||!dueDateGroup)return;
+  // Show paid amount field for partial or fully paid
+  paidGroup.style.display=(status==='partial'||status==='paid')?'':'none';
+  // Show expected date field for unpaid or partial
+  dueDateGroup.style.display=(status==='unpaid'||status==='partial')?'':'none';
+  // For fully paid, auto-fill paid amount with full fee
+  if(status==='paid'){
+    const fmt=document.getElementById('p-format')?.value;
+    document.getElementById('p-paid').value=fees()[fmt]||0;
+  }
 };
 
 // ── CRUD ──────────────────────────────────────────────────────
@@ -937,12 +967,59 @@ window.addPlayer = async () => {
   if(!isAdmin)return;
   const name=document.getElementById('p-name').value.trim();
   const format=document.getElementById('p-format').value;
-  const paid=parseFloat(document.getElementById('p-paid').value)||0;
   const notes=document.getElementById('p-notes').value.trim();
+  const status=document.getElementById('p-payment-status').value;
+  const dueDate=document.getElementById('p-due-date')?.value||'';
+  const fee=fees()[format]||0;
   if(!name){toast('Enter player name','error');return;}
-  yr().players.push({id:uid(),name,format,paid,notes});
-  await saveYear(activeYear);window.closeModal('modal-player');
-  toast(`${name} added`);renderPlayers();renderDashboard();
+
+  const paidRaw=parseFloat(document.getElementById('p-paid')?.value)||0;
+  const paid=status==='paid'?fee:status==='partial'?Math.min(paidRaw,fee):0;
+  const remaining=fee-paid;
+
+  const playerId=uid();
+  yr().players.push({id:playerId,name,format,paid,notes});
+
+  // Auto-create a Funding record if anything was paid
+  if(paid>0){
+    yr().funding.push({
+      id:uid(),
+      type:'player',
+      amount:paid,
+      name,
+      date:today(),
+      notes:`Player registration — ${name}`,
+      playerId
+    });
+  }
+
+  // Auto-create a Planned Payment if anything is still owed
+  if(remaining>0){
+    yr().planned.push({
+      id:uid(),
+      type:'player',
+      amount:remaining,
+      name,
+      dueDate,
+      notes:`Season fee balance — ${name}`,
+      status:'pending',
+      receivedDate:null,
+      receivedAmount:null,
+      fundingId:null,
+      playerId
+    });
+  }
+
+  await saveYear(activeYear);
+  window.closeModal('modal-player');
+
+  const msg = paid>0 && remaining>0
+    ? `${name} added — ${$fmt(paid)} added to Funding, ${$fmt(remaining)} added to Planned`
+    : paid>0
+    ? `${name} added — ${$fmt(paid)} added to Funding`
+    : `${name} added — ${$fmt(remaining)} added to Planned Payments`;
+  toast(msg);
+  renderPlayers();renderFunding();renderPlanned();renderDashboard();updateBadges();
 };
 
 window.deleteFunding = async (id) => {
